@@ -3,8 +3,12 @@ function [out] = surfaceDefiner(a)
 % the surface matrix in a cell for each requested surface
 %
 % surfaceDefiner('w') gets windows
-
-
+% surfaceDefiner('g') gets walls
+% surgaceDefiner('wg') gets windows and walls (in the order of 'wg')
+%
+% w - windows
+% g - walls
+%
 out = {[]};
 for i = 1:numel(a)
     if a(i)=='w'
@@ -17,6 +21,7 @@ for i = 1:numel(a)
     elseif a(i)=='g'
         % Windows [x,y,z,L,H,nx,ny,nz]
         walls = [0,0,0,0,0,0,0,0];
+        out{i} = walls;
     else
         out{i} = [];
     end

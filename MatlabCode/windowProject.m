@@ -1,4 +1,4 @@
-function [pA] = windowProject(normW, sun, A)
+function [pA] = windowProject(W, sun, A)
 % Calculates the projects area of a window (or any flat surface)
 %
 % normW - the normal to the window (cart)
@@ -20,15 +20,15 @@ if nargin < 3
 end
 
 % normalise to length of 1
-normW = norm(normW);
-sun = norm(sun);
+normW = W/norm(W);
+normSun = sun/norm(sun);
 
 % angle calcs
-angleNS = acos(dot(normW,sun)); %angle of window normal (N) to sun (S)
-angleGS = acos(dot([0,0,1],sun)); %angle of ground normal (G) to sun (S)
+cosAngleNS = dot(normW,normSun); %cos of angle of window normal (N) to sun (S)
+cosAngleGS = dot([0,0,1],normSun); %cos of angle of ground normal (G) to sun (S)
 
 % for 1m2 normal to the sun
-projAsun = A*cos(angleNS); %@90deg = 1m2, @0deg = 0m2
-pA = projAsun/cos(angleGS); %@low angle = big area, @ high angle = 1 area
+projAsun = A*cosAngleNS; %@90deg = 1m2, @0deg = 0m2
+pA = abs(projAsun/cosAngleGS); %@low angle = big area, @ high angle = 1 area
 
 end
