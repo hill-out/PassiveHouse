@@ -60,6 +60,21 @@ cosAngleGS = permute(dot(normG,normS),[2,3,1]); %cos of angle of ground normal (
 projAsun = cosAngleNS.*repmat(A,1,m)'; %@90deg = 1m2, @0deg = 0m2
 pA = (projAsun./cosAngleGS); %@low angle = big area, @ high angle = 1 area
 
+% removing areas where the sun is below the horizon
+pA(cosAngleGS<0) = 0;
 
+% removing areas where the sun is behind the window
+pA(cosAngleNS<0) = 0;
 
+% removing areas where the sun angle is low (therefore inaccurate)
+aboveHorizon = cosAngleGS<0;
+hold = zeros(size(aboveHorizon));
+hold1 = hold;
+hold1(2:end) = aboveHorizon(1:end-1);
+hold2 = hold;
+hold2(1:end-1) = aboveHorizon(2:end);
+
+nextHorizon = (aboveHorizon+hold1+hold2>0);
+
+pA(nextHorizon) = 0;
 end

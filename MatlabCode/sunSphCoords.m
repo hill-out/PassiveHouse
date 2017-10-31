@@ -51,6 +51,6 @@ azimuth = asin((-sin(solarTime).*cos(declination))./(sin(zenith)));
 azimuth = mod((azimuth+(pi/2)),pi)-(pi/2);
 
 %% final setup output
-
+% elevation = pi/2 - zenith
 sphCoords = [azimuth, pi/2-zenith, ones(nDates,1)];
 end
