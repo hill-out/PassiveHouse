@@ -4,9 +4,10 @@ function [gain] = directSolarGain(dirIrr, t, windows, g)
 % dirIrr - solar irradiance [mx1]
 % t - time [mx3] [M, D, H]
 % windows - windowData [x,y,z,L,H,nx,ny,nz] leave empty for surfaceDefiner
-% g - gain factor
+% g - gain factor [default = 0.8]
 %
 % gain - solar gain for the specified time Wh
+
 if nargin < 4
     g = 0.8;
 end

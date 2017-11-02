@@ -1,0 +1,5 @@
+function [] = thermalGain()
+
+
+
+end
