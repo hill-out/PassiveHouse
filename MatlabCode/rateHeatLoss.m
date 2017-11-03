@@ -30,20 +30,20 @@ for i = 1:1:4
     L_insul = structure(i,11);
     
 % Reynolds number for given velocity over a 'flat' surface. 
-Re = (u*L)/nu;
+Re = (u.*L)./nu;
 
 % Find the outdoor coefecient of heat transfer for a flat plate in
 % turbulent flow, given Re, Pr @ T_o 
-h_o = (0.037*(Re^(4/5))*(Pr^(4/5))*k_insul)/L;
+h_o = (0.037.*(Re.^(4/5)).*(Pr.^(4/5)).*k_insul)./L;
 
 % Define indoor coeffecient of convective heat transfer
 h_i = 2;
 
 % Find U value for given wall segment, at time t. 
-U = 1/((1/h_o)+(L_insul/k_insul)+(1/h_i));
+U = 1./((1./h_o)+(L_insul./k_insul)+(1./h_i));
 
 % Rate of heat loss through walls, negetive for flows out of the home.  
-q_ht{:,i} = U*A*(T_o - T_i);
+q_ht{:,i} = U.*A.*(T_o-T_i);
 end
 
 end
