@@ -1,4 +1,4 @@
-function [q_ht] = rateHeatLoss(u,T_i,T_o,Pr,nu,L,A,k_insul,L_insul) 
+function [q_ht] = rateHeatLoss(wMAT,T_i,Pr,nu,structure) 
 
 %Find the rate of thermal heat loss through building envilope due to heat
 %transfer. 
@@ -14,6 +14,21 @@ function [q_ht] = rateHeatLoss(u,T_i,T_o,Pr,nu,L,A,k_insul,L_insul)
 % L_insul = 'Thickness of insulating material'
 % h_o = 'coeffecient of convection heat transfer'
 
+structure = cell2mat(structure);
+
+u = wMAT(:,9);
+T_o = wMAT(:,7);
+
+%for each wall segment
+% Structure [x,y,z,L,H,A,nx,ny,nz,k_insul,L_insul]
+
+for i = 1:1:4
+    
+    L = structure(i,4);
+    A = structure(i,6);
+    k_insul = structure(i,10);
+    L_insul = structure(i,11);
+    
 % Reynolds number for given velocity over a 'flat' surface. 
 Re = (u*L)/nu;
 
@@ -28,6 +43,7 @@ h_i = 2;
 U = 1/((1/h_o)+(L_insul/k_insul)+(1/h_i));
 
 % Rate of heat loss through walls, negetive for flows out of the home.  
-q_ht = U.*A.*(T_o - T_i);
+q_ht{:,i} = U*A*(T_o - T_i);
+end
 
 end
