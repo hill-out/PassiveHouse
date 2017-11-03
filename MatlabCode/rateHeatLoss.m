@@ -1,4 +1,4 @@
-function [q_ht] = rateHeatLoss(wMAT,T_i,Pr,nu,structure) 
+function [q_ht] = rateHeatLoss(wMAT,T_i,Pr,nu,structure,windows) 
 
 %Find the rate of thermal heat loss through building envilope due to heat
 %transfer. 
@@ -15,6 +15,7 @@ function [q_ht] = rateHeatLoss(wMAT,T_i,Pr,nu,structure)
 % h_o = 'coeffecient of convection heat transfer'
 
 structure = cell2mat(structure);
+windows = cell2mat(windows);
 
 u = wMAT(:,9);
 T_o = wMAT(:,7);
@@ -43,7 +44,26 @@ h_i = 2;
 U = 1./((1./h_o)+(L_insul./k_insul)+(1./h_i));
 
 % Rate of heat loss through walls, negetive for flows out of the home.  
-q_ht{:,i} = U.*A.*(T_o-T_i);
+q_ht_structure{:,i} = U.*A.*(T_o-T_i);
 end
 
+q_ht_structure = cell2mat(q_ht_structure);
+
+% Find heat flow rate, using given U value of 0.1
+
+U_foundation = 0.1;
+q_ht_foundation = U_foundation.*structure(5,6).*(T_o-T_i);
+
+% Find heat flow through windows for 
+for i = 1:1:size(windows,1)
+    
+    A = windows(i,4)*windows(i,5);
+    U_installed = 0.85;
+    
+    q_ht_windows{:,i} = U.*A.*(T_o-T_i);
+end
+
+q_ht_windows = cell2mat(q_ht_windows);
+
+q_ht = [q_ht_structure q_ht_foundation q_ht_windows];
 end
