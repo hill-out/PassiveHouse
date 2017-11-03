@@ -4,7 +4,7 @@ function [out] = surfaceDefiner(a)
 %
 % surfaceDefiner('w') gets windows
 % surfaceDefiner('s') gets structure
-% surgaceDefiner('ws') gets windows and sturcture (in the order of 'wg')
+% surgaceDefiner('ws') gets windows and sturcture (in the order of 'ws')
 %
 % w - windows [incomplete]
 % s - structure (walls, roof, etc.) [incomplete]
@@ -29,7 +29,7 @@ for i = 1:numel(a)
         structure = [0, 0, 0, 18, 5.7, 102.6, 0, 1, 0, cellulose, 0.3;          %Exterior Wall South
                      0, 0, 0, 7, 5.7, 39.9, 1, 0, 0, cellulose, 0.3;            %Exterior Wall West
                      0, 0, 0, 18, 5.7, 102.6, 0, -1, 0, cellulose, 0.3;         %Exterior Wall North
-                     0, 0, 0, 7, 5.7, 39.9, -1, 0, 0, cellulose, 0.3            %Exterior Wall East
+                     0, 0, 0, 7, 5.7, 39.9, -1, 0, 0, cellulose, 0.3;            %Exterior Wall East
                      0, 0, 0, 5, 17, 79.5, 0, 0, 1, EPS300, 0.3];               %EPS300 Foundation
    
         
