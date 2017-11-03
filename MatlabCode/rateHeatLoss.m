@@ -45,6 +45,7 @@ U = 1./((1./h_o)+(L_insul./k_insul)+(1./h_i));
 
 % Rate of heat loss through walls, negetive for flows out of the home.  
 q_ht_structure{:,i} = U.*A.*(T_o-T_i);
+
 end
 
 q_ht_structure = cell2mat(q_ht_structure);
