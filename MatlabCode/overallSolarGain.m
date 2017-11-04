@@ -8,6 +8,8 @@ function [gain, dirGain, diffGain] = overallSolarGain(globalIrr, diffIrr, t, win
 % g - gain factor [default = 0.8]
 %
 % gain - the overall solar gain
+% dirGain - the direct solar gain
+% diffGain - the diffuse solar gain
 
 if nargin < 5
     g = 0.8;
