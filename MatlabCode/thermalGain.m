@@ -1,4 +1,4 @@
-function [] = thermalGain()
+function [] = thermalGain(dirGain, diffGain, )
 
 
 
