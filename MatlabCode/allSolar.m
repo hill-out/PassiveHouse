@@ -7,7 +7,7 @@ function [] = allSolar(globalIrr, diffIrr, t, windows, g)
 % windows - windowData [x,y,z,L,H,nx,ny,nz] leave empty for surfaceDefiner
 % g - gain factor [default = 0.8]
 %
-% gain - the overall solar gain
+% 
 
 [gain, dirGain, diffGain] = overallSolarGain(globalIrr, diffIrr, t, windows, g)
 
