@@ -80,7 +80,7 @@ q_ht_windows = cell2mat(q_ht_windows);
 %Assume a yearly average pressure difference on 19Pa. 
 Cp_air = 1;
 P_50Pa = 50;
-P_ave = 19;
+P_ave = 19; %http://www.sciencedirect.com/science/article/pii/S1876610215019207
 
 %u^2 propertional to P
 %u proportional to m_dot
