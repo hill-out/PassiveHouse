@@ -78,10 +78,10 @@ P_ave = 19;
 
 H_cieling = 2.5;
 
-m_dot_50Pa = structure(5,6)*(2*H_cieling)*0.6; 
-m_dot_19Pa = m_dot_50Pa*(sqrt(P_50Pa/P_ave));
+m_dot_50Pa = (structure(5,6)*(2*H_cieling))*1.2*0.6; % kg per hour 
+m_dot_19Pa = m_dot_50Pa*(sqrt(P_50Pa/P_ave)); % kg per hour
 
-q_ht_ac = m_dot_19Pa.*Cp_air*(T_o - T_i);
+q_ht_ac = (m_dot_19Pa.*Cp_air*(T_o - T_i))./3.6; %W
 
 %% Combine structure, foundation, windows and ac heat loss matrices:
 
