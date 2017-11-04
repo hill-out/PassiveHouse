@@ -1,4 +1,7 @@
+clear,clc;
 % Main script to calculate total heat losses over time in kWh. 
+load('weatherMATtry.mat')
+wMAT = wMATtry(1,:);
 
 [Pr, nu] = assignPRandNU(wMAT);
 [structure] = surfaceDefiner('s');
@@ -7,7 +10,7 @@
 [q_ht] = rateHeatLoss(wMAT,22,Pr,nu,structure,windows,foundation);
 
 q_ht_total = sum(q_ht,2); % Units: kWh
-q_ht_total_day = sum(reshape(q_ht_total,24,365));
+%q_ht_total_day = sum(reshape(q_ht_total,24,365));
 
 q_solar = getDailySolarGains;
 
