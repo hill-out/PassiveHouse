@@ -1,4 +1,4 @@
-function [q_ht] = rateHeatLoss(wMAT,T_i,Pr,nu,structure,windows) 
+function [q_ht] = rateHeatLoss(wMAT,T_i,Pr,nu,structure,windows,foundation) 
 
 %Find the rate of thermal heat loss through building envilope due to heat
 %transfer. 
@@ -16,14 +16,15 @@ function [q_ht] = rateHeatLoss(wMAT,T_i,Pr,nu,structure,windows)
 
 structure = cell2mat(structure);
 windows = cell2mat(windows);
+foundation = cell2mat(foundation);
 
 u = wMAT(:,9);
 T_o = wMAT(:,7);
 
-%for each wall segment
+%% For each wall segment
 % Structure [x,y,z,L,H,A,nx,ny,nz,k_insul,L_insul]
 
-for i = 1:1:4
+for i = 1:1:size(structure,1)
     
     L = structure(i,4);
     A = structure(i,6);
@@ -52,8 +53,16 @@ q_ht_structure = cell2mat(q_ht_structure);
 
 %% Find heat flow rate through foundation, using given U value of 0.1
 
-U_foundation = 0.1;
-q_ht_foundation = U_foundation.*structure(5,6).*(T_o-T_i);
+for i = 1:1:size(foundation,1)
+
+    A = foundation(i,6);
+    U_foundation = 0.1;
+    
+q_ht_foundation{:,i} = U_foundation.*A.*(T_o-T_i);
+
+end
+
+q_ht_foundation = cell2mat(q_ht_foundation);
 
 %% Find heat flow through windows for 
 for i = 1:1:size(windows,1)
@@ -78,7 +87,7 @@ P_ave = 19;
 
 H_cieling = 2.5;
 
-m_dot_50Pa = (structure(5,6)*(2*H_cieling))*1.2*0.6; % kg per hour 
+m_dot_50Pa = (foundation(1,6)*(2*H_cieling))*1.2*0.6; % kg per hour 
 m_dot_19Pa = m_dot_50Pa*(sqrt(P_50Pa/P_ave)); % kg per hour
 
 q_ht_ac = (m_dot_19Pa.*Cp_air*(T_o - T_i))./3.6; %W
