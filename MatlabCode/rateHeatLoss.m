@@ -1,4 +1,4 @@
-function [q_ht] = rateHeatLoss(wMAT,T_i,Pr,nu,structure,windows,foundation) 
+function [q_ht] = rateHeatLoss(T_o,u,T_i,Pr,nu,structure,windows,foundation) 
 
 %Find the rate of thermal heat loss through building envilope due to heat
 %transfer. 
@@ -14,12 +14,6 @@ function [q_ht] = rateHeatLoss(wMAT,T_i,Pr,nu,structure,windows,foundation)
 % L_insul = 'Thickness of insulating material'
 % h_o = 'coeffecient of convection heat transfer'
 
-structure = cell2mat(structure);
-windows = cell2mat(windows);
-foundation = cell2mat(foundation);
-
-u = wMAT(:,9);
-T_o = wMAT(:,7);
 
 %% For each wall segment
 % Structure [x,y,z,L,H,A,nx,ny,nz,k_insul,L_insul]
