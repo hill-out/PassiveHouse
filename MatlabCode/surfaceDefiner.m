@@ -14,12 +14,11 @@ out = {[]};
 for i = 1:numel(a)
     if a(i) == 'w'
         % Windows [x,y,z,L,H,nx,ny,nz]
-        windows = [0, 0, 0, 3, 2, 0, 1, 0;
-                   0, 0, 0, 4, 2, 0, 1, 0;
-                   0, 0, 0, 3, 2, 1, 0, 0;
-                   0, 0, 0, 3, 2, 0, -1, 0;
-                   0, 0, 0, 2, 2, 0, 1, 1]; %currently ignoring [x,y,z]
-        
+        windows = [0, 0, 0, 10, 2, 1, 0, 0;
+                   0, 0, 0, 4, 2, 0, -1, 0;
+                   0, 0, 0, 1, 2, -1, 0, 0;
+                   0, 0, 0, 3, 2, 0, 1, 0]; %currently ignoring [x,y,z]               
+               
         out{i} = windows;
     elseif a(i) == 's'
         % Structure [x,y,z,L,H,A,nx,ny,nz,k_insul,L_insul]
