@@ -50,21 +50,40 @@ end
 
 q_ht_structure = cell2mat(q_ht_structure);
 
-% Find heat flow rate, using given U value of 0.1
+%% Find heat flow rate through foundation, using given U value of 0.1
 
 U_foundation = 0.1;
 q_ht_foundation = U_foundation.*structure(5,6).*(T_o-T_i);
 
-% Find heat flow through windows for 
+%% Find heat flow through windows for 
 for i = 1:1:size(windows,1)
     
     A = windows(i,4)*windows(i,5);
     U_installed = 0.85;
     
-    q_ht_windows{:,i} = U.*A.*(T_o-T_i);
+    q_ht_windows{:,i} = U_installed.*A.*(T_o-T_i);
 end
 
 q_ht_windows = cell2mat(q_ht_windows);
 
-q_ht = [q_ht_structure q_ht_foundation q_ht_windows];
+%% Heat loss due to air changes (with an airtightness of 0.6ac/h @50Pa
+%pressure difference. 
+%Assume a yearly average pressure difference on 19Pa. 
+Cp_air = 1;
+P_50Pa = 50;
+P_ave = 19;
+
+%u^2 propertional to P
+%u proportional to m_dot
+
+H_cieling = 2.5;
+
+m_dot_50Pa = structure(5,6)*(2*H_cieling)*0.6; 
+m_dot_19Pa = m_dot_50Pa*(sqrt(P_50Pa/P_ave));
+
+q_ht_ac = m_dot_19Pa.*Cp_air*(T_o - T_i);
+
+%% Combine structure, foundation, windows and ac heat loss matrices:
+
+q_ht = [q_ht_structure q_ht_foundation q_ht_windows q_ht_ac];
 end
