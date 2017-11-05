@@ -23,7 +23,7 @@ if nargin < 6 || isempty(meshCrit)
 end
 
 if nargin < 7 || isempty(dt)
-    dt = 1; %s
+    dt = 1 %s
 end
 
 n = size(cTemp,1); % number of layers
@@ -43,18 +43,17 @@ for i = 1:nT
 end
 
 %% calculate the energy leaving the other layers
-l = meshSpace(2:end)-meshSpace(1:end-1);
 
 for i = 1:nT
     k = thermalMass(i,11);
-    dQ(2:end-1,i) = (k./(l.*thermalMass(i,6)))'.*(cTemp(2:end,i)-cTemp(1:end-1,i));
+    l = meshSpace(1:end-1)-meshSpace(2:end);
+    dQ(2:end-1,i) = (k./(l.*thermalMass(i,6)))'.*(cTemp(1:end-1,i)-cTemp(2:end,i));
 end
 
 %% calculate the change in temperature with time
 
-dQ_layer = dQ(1:end-2,:)-dQ(3:end,:);
-mCp = (thermalMass(:,12).*thermalMass(:,13).*thermalMass(:,6)*l)';
+dQ_layer = dQ(1:end-1,:)-dQ(2:end,:);
+mCp = thermalMass(:,
 
-dT_t = (dQ_layer.*dt)./mCp;
 
 end
