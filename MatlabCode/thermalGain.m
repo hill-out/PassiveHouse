@@ -1,15 +1,18 @@
-function [] = thermalGain(dirGain, diffGain, thermalMass, split)
-% Calculates the temperature of the thermal mass based on soalr gain
+function [] = thermalGain(dirGain, diffGain, thermalMass, cTemp)
+% Calculates the temperature of the thermal mass based on soalr gain using
+% a 1D heat transfer finite difference method
 % 
 % dirGain - the direct solar gain
 % diffGain - the diffuse solar gain
 % thermalMass - the info on the thermalMass
-% split
+% cTemp - current temperature in each cell
 
-if nargin < 3 || isempty(thermalMass)
+if isempty(thermalMass)
     thermalMass = surfaceDefiner('t');
     thermalMass = thermalMass{1};
 end
 
-if nargin < 4 || is
+
+
+
 end
