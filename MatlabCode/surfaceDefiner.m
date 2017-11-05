@@ -39,11 +39,11 @@ for i = 1:numel(a)
    
         out{i} = foundation;
     elseif a(i) == 't'
-        % Thermal Mass [x,y,z,L,W,D,nx,ny,nz,cond,Cp,density,kr]
+        % Thermal Mass [x,y,z,L,W,D,A,nx,ny,nz,cond,Cp,density,kr]
         castConcrete = [1.130, 1000, 2000, 0.3]; % http://www.iesve.com/downloads/help/ve2012/Thermal/ApacheTables.pdf
         
-        thermalMass = [0, 0, 0, 5, 17, 0.1, 0, 0, 1, castConcrete;
-                       0, 0, 2.7, 5, 17, 0.025, 0, 0, 1, castConcrete];
+        thermalMass = [0, 0, 0, 5, 17, 0.1, 85, 0, 0, 1, castConcrete;
+                       0, 0, 2.7, 5, 17, 0.025, 85, 0, 0, 1, castConcrete];
         
         out{i} = thermalMass;
     else
