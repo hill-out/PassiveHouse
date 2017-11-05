@@ -1,4 +1,4 @@
-function [outTemp] = thermalGain(dirGain, diffGain, cTemp, T_i, thermalMass, meshCrit, dt)
+function [outTemp, QLoss] = thermalGain(dirGain, diffGain, cTemp, T_i, thermalMass, meshCrit, dt)
 % Calculates the temperature of the thermal mass based on soalr gain using
 % a 1D heat transfer finite difference method
 % 
@@ -43,7 +43,8 @@ for i = 1:nT
 end
 
 %% calculate the energy leaving the other layers
-l = (meshSpace(2:end)-meshSpace(1:end-1))/2+meshSpace(1:end-1); %position of centres of cells
+cSize = (meshSpace(2:end)-meshSpace(1:end-1)); %list of cell sizes
+l = cSize./2+meshSpace(1:end-1); %position of centers of cells
 dl = (l(2:end)-l(1:end-1));
 for i = 1:nT
     k = thermalMass(i,11);
@@ -53,12 +54,12 @@ end
 %% calculate the change in temperature with time
 
 dQ_cell = dQ(1:end-1,:)-dQ(2:end,:);
-mCp = (thermalMass(:,12).*thermalMass(:,13).*thermalMass(:,6)*l)';
+mCp = (thermalMass(:,12).*thermalMass(:,13).*thermalMass(:,6).*thermalMass(:,7)*cSize)';
 
 dT_t = (dQ_cell.*dt)./mCp;
 
 
-%% outTemp
+%% out
 outTemp = cTemp + dT_t;
-
+QLoss = totalLoss;
 end
