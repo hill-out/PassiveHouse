@@ -27,7 +27,9 @@ for i = 1:numel(a)
         structure = [0, 0, 0, 18, 5.7, 102.6, 0, 1, 0, cellulose, 0.3;          %Exterior Wall South
                      0, 0, 0, 7, 5.7, 39.9, 1, 0, 0, cellulose, 0.3;            %Exterior Wall West
                      0, 0, 0, 18, 5.7, 102.6, 0, -1, 0, cellulose, 0.3;         %Exterior Wall North
-                     0, 0, 0, 7, 5.7, 39.9, -1, 0, 0, cellulose, 0.3];          %Exterior Wall East
+                     0, 0, 0, 7, 5.7, 39.9, -1, 0, 0, cellulose, 0.3;           %Exterior Wall East
+                     0, 0, 0, 5.73, 1.2, 100.32, 0, 0, 1, cellulose, 0.3          %South Facing Roof
+                     0, 0, 0, 3.05, 1.2, 26.8, 0, 0, 1, cellulose, 0.3];          %North Facing Roof
    
         
         out{i} = structure;

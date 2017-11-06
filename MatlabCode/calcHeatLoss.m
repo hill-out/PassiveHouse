@@ -6,7 +6,7 @@ load('weatherSTRUCT.mat')
 [swf] = surfaceDefiner('swf');
 [q_ht] = rateHeatLoss(wSTRUCT.Temp,wSTRUCT.WSpeed,22,Pr,nu,swf{1},swf{2},swf{3});
 
-q_ht_total = sum(q_ht,2); % Units: kWh
+q_ht_total = sum(q_ht,2); % Units: Wh
 q_ht_total_day = sum(reshape(q_ht_total,24,365));
 
 q_solar = getDailySolarGains;
