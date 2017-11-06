@@ -24,6 +24,7 @@ q_total = q_ht_total_day + q_solar;
 subplot(2,1,2)
 plot(q_total)
 
+count_negative = sum(q_total<0);
+count_positive = sum(q_total>0);
 
-
-total_heat_loss = sum(q_total(q_total<0))/160
+total_heat_loss = sum(q_total(q_total<0))/160;
