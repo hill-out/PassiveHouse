@@ -27,7 +27,7 @@ if nargin < 7 || isempty(dt)
 end
 
 n = size(cTemp,1); % number of cells
-meshSize = linspace(0,1,n+1);
+meshSize = linspace(0,1,n+1)';
 meshSpace = meshCrit(meshSize); % z positions of the mesh layers
 
 %% calculate the energy leaving the base and top
@@ -48,13 +48,13 @@ l = cSize./2+meshSpace(1:end-1); %position of centers of cells
 dl = (l(2:end)-l(1:end-1));
 for i = 1:nT
     k = thermalMass(i,11);
-    dQ(2:end-1,i) = -(k./(dl.*thermalMass(i,6)))'.*(cTemp(2:end,i)-cTemp(1:end-1,i));
+    dQ(2:end-1,i) = -(k./(dl.*thermalMass(i,6))).*(cTemp(2:end,i)-cTemp(1:end-1,i));
 end
 
 %% calculate the change in temperature with time
 
 dQ_cell = dQ(1:end-1,:)-dQ(2:end,:);
-mCp = (thermalMass(:,12).*thermalMass(:,13).*thermalMass(:,6).*thermalMass(:,7)*cSize)';
+mCp = (thermalMass(:,12).*thermalMass(:,13).*thermalMass(:,6).*thermalMass(:,7)*cSize);
 
 dT_t = (dQ_cell.*dt)./mCp;
 
