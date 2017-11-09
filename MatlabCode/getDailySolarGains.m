@@ -1,4 +1,4 @@
-function [c] = getDailySolarGains()
+function [c,a] = getDailySolarGains()
 
 load('weatherSTRUCTtry.mat');
 a = overallSolarGain(wSTRUCTtry.global,wSTRUCTtry.diffuse, [wSTRUCTtry.MONTH,wSTRUCTtry.DAY,wSTRUCTtry.HOUR],[],0.8);
