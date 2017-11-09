@@ -19,7 +19,7 @@ if nargin < 3 || isempty(windows)
 end
 
 % calculates the projected area of each window
-sunNorm = roughSunSphCoords(t);
+sunNorm = sunSphCoords(t);
 sunNorm = vecsph2cart(sunNorm);
 winProjA = windowProject(windows(:,6:8),sunNorm,prod(windows(:,4:5),2));
 
