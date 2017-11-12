@@ -1,4 +1,4 @@
-function [q_ht] = rateHeatLoss(T_o,u,T_i,Pr,nu,structure,windows,foundation) 
+function [q_ht] = rateHeatLossHT(T_o,u,T_i,Pr,nu,structure,windows,foundation) 
 
 %Find the rate of thermal heat loss through building envilope due to heat
 %transfer. 
