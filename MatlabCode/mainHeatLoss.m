@@ -20,7 +20,9 @@ load('weatherSTRUCTtry.mat');
 %b = reshape(sum(a,2),24,365);
 %c = sum(b);
 [q_solar] = sum(overallSolarGain(wSTRUCTtry.global,wSTRUCTtry.diffuse, [wSTRUCTtry.MONTH,wSTRUCTtry.DAY,wSTRUCTtry.HOUR],[],0.8),2);
-[q_occupancy] = zeros(size(wSTRUCT.Temp,1),1);
+
+load('occupancyMAT.mat')
+[q_occupancy] = occupancyGain(occupancyMAT(:,3),occupancyMAT(:,2));
 
 q_total = zeros(size(wSTRUCT.Temp,1),1);
 q = sum([q_ht q_ac q_solar q_occupancy],2);
