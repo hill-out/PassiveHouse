@@ -14,7 +14,7 @@ if nargin < 4 || isempty(g) %can ignore the g input
 end
 
 if nargin < 5
-    wallLayerThickness = 0.005; %m
+    wallLayerThickness = 0.01; %m
 end
 
 %% get the surfaces
@@ -28,6 +28,8 @@ initialT = 23; %degC
 dt = 5;
 
 qTM = zeros(nTM,size(t,1),floor(3600/dt));
+qAir = zeros(nTM+1,size(t,1),floor(3600/dt));
+
 %% run each thermal mass
 for i = 0:1:nTM
     
@@ -38,6 +40,7 @@ for i = 0:1:nTM
     
     if i == 0
         refl = 1; %reflectivity
+        obs2 = zeros(size(t,1),1);
     else
         
         solarA = sunSphCoords(t);
@@ -48,9 +51,9 @@ for i = 0:1:nTM
         obs2 = zeros(size(obs0));
         obs2(obs1) = sqrt(thermalMass(i,4))./obs0(obs1);
         
-        refl = thermalMass(i,10);
+        refl = thermalMass(i,12);
         
-        tmDirIrr = (1-refl).*sum(obs2*dirGaini,2);
+        tmDirIrr = (1-refl).*sum(obs2'.*dirGaini,2);
         tmDiffIrr = (1-refl).*sum(diffGaini,2);
 
         meshLimX = [0:0.01:1]';
@@ -76,6 +79,7 @@ for i = 0:1:nTM
         
     end
     
+    qAir(i+1,:,:) = repmat(sum(refl.*(1-obs2).*dirGaini,2)+sum(refl*diffGaini,2),1,floor(3600/dt));
     
     
 end
