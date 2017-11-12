@@ -55,11 +55,11 @@ for i = 1:numel(a)
         out{i} = thermalMass;
         
     elseif a(i) == 'p'
-        % solarPanel [pL,pH,pA,NUM,nx,ny,nz]
+        % solarPanel [pL,pH,pA,NUM,eff,nx,ny,nz]
         pL = 1053/1000;
         pH = 1590/1000;
         pA = pL*pH;
-        solarPanel = [pL, pH, pA, 39, cos(pi)/6, 0, sin(pi)/6];          
+        solarPanel = [pL, pH, pA, 39, 0.197, cos(pi)/6, 0, sin(pi)/6];          
         
         out{i} = solarPanel;
     else
