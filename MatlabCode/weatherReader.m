@@ -19,7 +19,7 @@ save('weatherSTRUCTdsy.mat','wSTRUCTdsy')
 save('weatherMATdsy.mat','wMATdsy')
 
 % for test ref. year (try)
-[wMATtry,~,ctry] = xlsread('../CIBSE approved Edinburgh Weather data.xls','Design Summer Year');
+[wMATtry,~,ctry] = xlsread('../CIBSE approved Edinburgh Weather data.xls','Test Ref Year');
 t = cell(1,20);
 for i = 1:10
     t(i*2-1) = {ctry{3,i}(~isspace(ctry{3,i}))};
