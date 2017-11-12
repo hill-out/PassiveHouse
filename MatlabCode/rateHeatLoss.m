@@ -1,4 +1,4 @@
-function [q_ht] = rateHeatLoss(wMAT,T_i,Pr,nu,structure,windows,foundation) 
+function [q_ht] = rateHeatLoss(T_o,u,T_i,Pr,nu,structure,windows,foundation) 
 
 %Find the rate of thermal heat loss through building envilope due to heat
 %transfer. 
@@ -14,12 +14,6 @@ function [q_ht] = rateHeatLoss(wMAT,T_i,Pr,nu,structure,windows,foundation)
 % L_insul = 'Thickness of insulating material'
 % h_o = 'coeffecient of convection heat transfer'
 
-structure = cell2mat(structure);
-windows = cell2mat(windows);
-foundation = cell2mat(foundation);
-
-u = wMAT(:,9);
-T_o = wMAT(:,7);
 
 %% For each wall segment
 % Structure [x,y,z,L,H,A,nx,ny,nz,k_insul,L_insul]
@@ -80,7 +74,7 @@ q_ht_windows = cell2mat(q_ht_windows);
 %Assume a yearly average pressure difference on 19Pa. 
 Cp_air = 1;
 P_50Pa = 50;
-P_ave = 19;
+P_ave = 19; %http://www.sciencedirect.com/science/article/pii/S1876610215019207
 
 %u^2 propertional to P
 %u proportional to m_dot
@@ -89,9 +83,9 @@ H_cieling = 2.5;
 
 m_dot_50Pa = (foundation(1,6)*(2*H_cieling))*1.2*0.6; % kg per hour 
 
-m_dot_19Pa = m_dot_50Pa*(sqrt(P_50Pa/P_ave)); % kg per hour
+m_dot_ave = m_dot_50Pa/20;
 
-q_ht_ac = (m_dot_19Pa.*Cp_air*(T_o - T_i))./3.6; %W
+q_ht_ac = (m_dot_ave.*Cp_air*(T_o - T_i))./(3.6); %W
 
 %% Combine structure, foundation, windows and ac heat loss matrices:
 
