@@ -48,13 +48,16 @@ for i = 0:1:nTM
         obs2 = zeros(size(obs0));
         obs2(obs1) = sqrt(thermalMass(i,4))./obs0(obs1);
         
-        refl = thermalMass(i,14);
+        refl = thermalMass(i,10);
+        
+        tmDirIrr = (1-refl).*sum(obs2*dirGaini,2);
+        tmDiffIrr = (1-refl).*sum(diffGaini,2);
 
         meshLimX = [0:0.01:1]';
         meshLimY = [[4*[0:0.01:0.5].^3,(1+4*([0.01:0.01:0.5]-0.5).^(3))]*0.7+[0:0.01:1]*0.3]';
         meshCrit = @(x)(smartMesh(x,meshLimX,meshLimY));
         
-        wallMesh = findSpacing(meshCrit, wallLayerThickness/thermalMass(i,6));
+        wallMesh = findSpacing(meshCrit, wallLayerThickness/thermalMass(i,5));
         
         nLayers = ceil(1/wallMesh)+1;
         cTemp = ones(nLayers,1)*initialT;
@@ -64,7 +67,7 @@ for i = 0:1:nTM
         
         for j = 1:size(t,1)
             for k = 1:floor(3600/dt)
-                [outT, outQ] = thermalGain((1-refl)*sum(dirGaini(j,:)), (1-refl)*sum(diffGaini(j,:)), cTemp, 22, thermalMass(i,:), meshCrit, dt);
+                [outT, outQ] = thermalGain(tmDirIrr(j), tmDiffIrr(j), cTemp, 22, thermalMass(i,:), meshCrit, dt);
                 T{i}(:,j,k) = outT;
                 qTM(i,j,k) = outQ;
                 cTemp = outT;
