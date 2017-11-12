@@ -10,6 +10,7 @@ function [out] = surfaceDefiner(a)
 % s - structure (walls, roof, etc.) [incomplete]
 % f - foundation
 % t - thermal mass [incomplete]
+% p - solar panel
 %
 out = {[]};
 for i = 1:numel(a)
@@ -52,6 +53,15 @@ for i = 1:numel(a)
                        0, 0, 2.7, 5, 17, 0.1, 85, 0, 0, 1, castConcrete];
         
         out{i} = thermalMass;
+        
+    elseif a(i) == 'p'
+        % solarPanel [pL,pH,pA,NUM,nx,ny,nz]
+        pL = 1053/1000;
+        pH = 1590/1000;
+        pA = pL*pH;
+        solarPanel = [pL, pH, pA, 39, cos(pi)/6, 0, sin(pi)/6];          
+        
+        out{i} = solarPanel;
     else
         out{i} = [];
     end
