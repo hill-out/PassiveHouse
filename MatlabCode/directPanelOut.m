@@ -3,8 +3,8 @@ function [pvOut] = directPanelOut(dirIrr, t, panels, eff)
 %
 % dirIrr - solar irradiance [mx1]
 % t - time [mx3] [M, D, H]
-% panels - panelData [pL,pH,pA,NUM,eff,nx,ny,nz] leave empty for surfaceDefiner
-% g - gain factor [default = 0.8]
+% panels - panelData [pL,pH,NUM,eff,nx,ny,nz] leave empty for surfaceDefiner
+% eff - panel efficiency
 %
 % gain - solar gain for the specified time Wh
 
@@ -21,11 +21,11 @@ end
 % calculates the projected area on the solar panels
 sunNorm = sunSphCoords(t);
 sunNorm = vecsph2cart(sunNorm);
-panProjA = panelProject(panels(:,6:8),sunNorm,prod(panels(:,1:3),2));
+panProjA = panelProject(panels(:,5:7),sunNorm,prod(panels(:,1:3),2));
 
 % calculates the direct solar energy
 hold = size(panels);
 nPan = hold(1);
-pvOut = eff*panProjA.*repmat(dirIrr,1,nPan);
+pvOut = eff.*panProjA.*repmat(dirIrr,1,nPan);
 
 end
