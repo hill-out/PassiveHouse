@@ -34,9 +34,20 @@ for i = 0:1:nTM
     wi = windows(windows(:,9)==i,:); %find the windows for the current i
     [~, dirGaini, diffGaini] = overallSolarGain(globalIrr, diffIrr, t, wi, g);
     
+
+    
     if i == 0
         refl = 1; %reflectivity
     else
+        
+        solarA = sunSphCoords(t);
+        AoB = tan(solarA(:,2));
+        
+        obs0 = wi(:,5)*(1./(AoB)');
+        obs1 = obs0>sqrt(thermalMass(i,4));
+        obs2 = zeros(size(obs0));
+        obs2(obs1) = sqrt(thermalMass(i,4))./obs0(obs1);
+        
         refl = thermalMass(i,14);
 
         meshLimX = [0:0.01:1]';
@@ -52,14 +63,16 @@ for i = 0:1:nTM
         
         
         for j = 1:size(t,1)
-            for k = 1:floor(3600/dt);
+            for k = 1:floor(3600/dt)
                 [outT, outQ] = thermalGain((1-refl)*sum(dirGaini(j,:)), (1-refl)*sum(diffGaini(j,:)), cTemp, 22, thermalMass(i,:), meshCrit, dt);
                 T{i}(:,j,k) = outT;
                 qTM(i,j,k) = outQ;
                 cTemp = outT;
             end
         end
+        
     end
+    
     
     
 end
