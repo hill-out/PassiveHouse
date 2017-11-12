@@ -21,7 +21,7 @@ end
 % calculates the projected area on the solar panels
 sunNorm = sunSphCoords(t);
 sunNorm = vecsph2cart(sunNorm);
-panProjA = panelProject(panels(:,5:7),sunNorm,prod(panels(:,1:3),2));
+panProjA = panelProject(panels(:,5:7),sunNorm,prod(panels(:,1:3),2))';
 
 % calculates the direct solar energy
 hold = size(panels);
