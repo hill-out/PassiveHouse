@@ -33,8 +33,12 @@ for i = 1:1:size(q,1)
 end
 
 q_total_day = sum(reshape(q_total,24,365));
-%plot(q_total_day);
 
+q_heat = sum(q_total(q_total < 0))/160;
+q_cool = sum(q_total(q_total < 0))/160;
+
+
+subplot(2,1,1)
 hold on
 plot(q_ht)
 plot(q_ac)
@@ -44,6 +48,10 @@ plot(q_solar)
 plot(q_total)
 legend('Heat Transfer through Enelope','Air Changes','MVHR','bypass','Solar','Total')
 hold off
+
+subplot(2,1,2)
+plot(q_total_day)
+
 
 
         
