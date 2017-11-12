@@ -14,10 +14,33 @@ out = {[]};
 for i = 1:numel(a)
     if a(i) == 'w'
         % Windows [x,y,z,L,H,nx,ny,nz,th]
-        windows = [0, 0, 0, 10, 2, 1, 0, 0;
+        
+        windows = [0, 0, 0, 1.6, 1, 1, 0, 0, 1;%kitchen
+                   0, 0, 0, 2, 1, 0, -1, 0, 1;%kitchen
+                   0, 0, 0, 2, 2.06, 1, 0, 0, 2;%dining
+                   0, 0, 0, 1.3, 1, 1, 0, 0, 2;%dining
+                   0, 0, 0, 0.8, 2.92, 0, -1, 0, 2;%dining
+                   0, 0, 0, 1.3, 1, 1, 0, 0, 3;%library
+                   0, 0, 0, 1.3, 1, 1, 0, 0, 3;%library
+                   0, 0, 0, 1.3, 1, 1, 0, 0, 4;%study
+                   0, 0, 0, 1.3, 0.5, 1, 0, 0, 5;%bedroom1
+                   0, 0, 0, 1.05, 1.51, cos(pi/6), 0, sin(pi/6), 5;%bedroom1
+                   0, 0, 0, 1.3, 0.5, 1, 0, 0, 6;%bedroom2
+                   0, 0, 0, 1.05, 1.51, cos(pi/6), 0, sin(pi/6), 6;%bedroom2
+                   0, 0, 0, 1.3, 0.5, 1, 0, 0, 7;%single
+                   0, 0, 0, 1.05, 1.51, cos(pi/6), 0, sin(pi/6), 7;%single
+                   0, 0, 0, 1.3, 2, 1, 0, 0, 8;%master
+                   0, 0, 0, 2, 1, 0, -1, 0, 8;%master
+                   0, 0, 0, 0.8, 1, 0, 1, 0, 0;%bathroom ground
+                   0, 0, 0, 0.8, 1, 0, 1, 0, 0;%bathroom first
+                   0, 0, 0, 3.82, 0.6, -1, 0, 0, 0;%hall first
+                   0, 0, 0, 0.7, 1, 0, 1, 0, 0;%bathroom master
+            
+        10, 2, 1, 0, 0;
                    0, 0, 0, 4, 2, 0, -1, 0;
                    0, 0, 0, 1, 2, -1, 0, 0;
-                   0, 0, 0, 3, 2, 0, 1, 0]; %currently ignoring [x,y,z]               
+                   0, 0, 0, 3, 2, 0, 1, 0;
+                   0, 0, 0, 1.5, 4, cos(pi/6), 0, sin(pi/6)]; %currently ignoring [x,y,z]               
                
         out{i} = windows;
     elseif a(i) == 's'
@@ -39,11 +62,18 @@ for i = 1:numel(a)
    
         out{i} = foundation;
     elseif a(i) == 't'
-        % Thermal Mass [x,y,z,L,W,D,A,nx,ny,nz,cond,Cp,density,kr]
+        % Thermal Mass [x,y,z,D,A,nx,ny,nz,cond,Cp,density,kr]
         castConcrete = [1.130, 1000, 2000, 0.3]; % http://www.iesve.com/downloads/help/ve2012/Thermal/ApacheTables.pdf
         
-        thermalMass = [0, 0, 0, 5, 17, 0.025, 85, 0, 0, 1, castConcrete;
-                       0, 0, 2.7, 5, 17, 0.1, 85, 0, 0, 1, castConcrete];
+        thermalMass = [0, 0, 0, 10.26, 0, 0, 1, concrete; %kitchen (1)
+                       0, 0, 0, 22.5, 0, 0, 1, concrete; %dining (2)
+                       0, 0, 0, 16.11, 0, 0, 1, concrete; %library (3)
+                       0, 0, 0, 8.67, 0, 0, 1, concrete; %study (4)
+                       0, 0, 2.7, 13.71, 0, 0, 1, concrete; %bedroom 1 (5)
+                       0, 0, 2.7, 12.08, 0, 0, 1, concrete; %bedroom 2 (6)
+                       0, 0, 2.7, 8.54, 0, 0, 1, concrete; %single (7)
+                       0, 0, 2.7, 15.67, 0, 0, 1, concrete]; %master (8)
+                       
         
         out{i} = thermalMass;
     else
