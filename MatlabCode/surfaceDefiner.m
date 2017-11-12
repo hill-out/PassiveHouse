@@ -34,14 +34,9 @@ for i = 1:numel(a)
                    0, 0, 0, 0.8, 1, 0, 1, 0, 0;%bathroom ground
                    0, 0, 0, 0.8, 1, 0, 1, 0, 0;%bathroom first
                    0, 0, 0, 3.82, 0.6, -1, 0, 0, 0;%hall first
-                   0, 0, 0, 0.7, 1, 0, 1, 0, 0;%bathroom master
+                   0, 0, 0, 0.7, 1, 0, 1, 0, 0];%bathroom master
             
-        10, 2, 1, 0, 0;
-                   0, 0, 0, 4, 2, 0, -1, 0;
-                   0, 0, 0, 1, 2, -1, 0, 0;
-                   0, 0, 0, 3, 2, 0, 1, 0;
-                   0, 0, 0, 1.5, 4, cos(pi/6), 0, sin(pi/6)]; %currently ignoring [x,y,z]               
-               
+        
         out{i} = windows;
     elseif a(i) == 's'
         % Structure [x,y,z,L,H,A,nx,ny,nz,k_insul,L_insul]
@@ -65,7 +60,7 @@ for i = 1:numel(a)
         out{i} = foundation;
     elseif a(i) == 't'
         % Thermal Mass [x,y,z,D,A,nx,ny,nz,cond,Cp,density,kr]
-        castConcrete = [1.130, 1000, 2000, 0.3]; % http://www.iesve.com/downloads/help/ve2012/Thermal/ApacheTables.pdf
+        concrete = [1.130, 1000, 2000, 0.3]; % http://www.iesve.com/downloads/help/ve2012/Thermal/ApacheTables.pdf
         
         thermalMass = [0, 0, 0, 10.26, 0, 0, 1, concrete; %kitchen (1)
                        0, 0, 0, 22.5, 0, 0, 1, concrete; %dining (2)
