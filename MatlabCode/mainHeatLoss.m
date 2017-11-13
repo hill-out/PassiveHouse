@@ -2,23 +2,20 @@ clear,clc;
 % Main script to calculate total heat losses over time in kWh. 
 load('weatherSTRUCT.mat')
 
-[Pr, nu] = assignPRandNU(wSTRUCT.Temp);
+[Pr, nu, k] = assignPRandNU(wSTRUCT.Temp);
 [swf] = surfaceDefiner('swf');
-
+[s] = windowfromstructure(swf{1},swf{2});
 T_i = 22; %Define indoor air temperature
 
 %Thermal Losses:
 
-[q_ht] = sum(rateHeatLossHT(wSTRUCT.Temp,wSTRUCT.WSpeed,T_i,Pr,nu,swf{1},swf{2},swf{3}),2);
+[q_ht] = sum(rateHeatLossHT(wSTRUCT.Temp,wSTRUCT.WSpeed,T_i,Pr,nu,k,s,swf{2},swf{3}),2);
 [q_ac] = rateHeatLossAC(T_i,wSTRUCT.Temp,swf{3});
 [q_MVHR] = rateHeatLossMVHR(wSTRUCT.Temp,T_i,240,0.9);
 [q_MVHRbypass] = rateHeatLossMVHRbypass(wSTRUCT.Temp,T_i,240);
-
+[q_stack, V] = stackVent(24,wSTRUCT.Temp,wSTRUCT.WSpeed);
 %Thermal Gains: 
 load('weatherSTRUCTtry.mat');
-%a = overallSolarGain(wSTRUCTtry.global,wSTRUCTtry.diffuse, [wSTRUCTtry.MONTH,wSTRUCTtry.DAY,wSTRUCTtry.HOUR],[],0.8);
-%b = reshape(sum(a,2),24,365);
-%c = sum(b);
 [q_solar] = sum(overallSolarGain(wSTRUCTtry.global,wSTRUCTtry.diffuse, [wSTRUCTtry.MONTH,wSTRUCTtry.DAY,wSTRUCTtry.HOUR],[],0.8),2);
 
 load('occupancyMAT.mat')
@@ -47,8 +44,9 @@ plot(q_ac)
 plot(q_MVHR)
 plot(q_MVHRbypass)
 plot(q_solar)
+plot(q_stack)
 plot(q_total)
-legend('Heat Transfer through Enelope','Air Changes','MVHR','bypass','Solar','Total')
+legend('Heat Transfer through Envelope','Air Changes','MVHR','bypass','Solar','Stack','Total')
 hold off
 
 subplot(2,1,2)
