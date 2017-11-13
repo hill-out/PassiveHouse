@@ -36,9 +36,9 @@ dQ = zeros(n+1,nT); %initalise heat transfer across each layer
 for i = 1:nT
     dQ(end,i) = 0; %energy leaving base
     
-    totalIrr = (dirGain + diffGain)*0.7; % spread irradiance * (1-reflect)
+    totalIrr = (dirGain + diffGain); % spread irradiance * (1-reflect)
     h_i = 2; %indoor convective heat transfer coefficient
-    totalLoss = (cTemp(1,i)-T_i)*h_i*thermalMass(i,7);
+    totalLoss = (cTemp(1,i)-T_i)*h_i*thermalMass(i,4);
     dQ(1,i) = totalIrr - totalLoss;
 end
 
@@ -47,14 +47,14 @@ cSize = (meshSpace(2:end)-meshSpace(1:end-1)); %list of cell sizes
 l = cSize./2+meshSpace(1:end-1); %position of centers of cells
 dl = (l(2:end)-l(1:end-1));
 for i = 1:nT
-    k = thermalMass(i,11);
-    dQ(2:end-1,i) = -(k./(dl.*thermalMass(i,6))).*(cTemp(2:end,i)-cTemp(1:end-1,i));
+    k = thermalMass(i,9);
+    dQ(2:end-1,i) = -(k./(dl.*thermalMass(i,5))).*(cTemp(2:end,i)-cTemp(1:end-1,i));
 end
 
 %% calculate the change in temperature with time
 
 dQ_cell = dQ(1:end-1,:)-dQ(2:end,:);
-mCp = (thermalMass(:,12).*thermalMass(:,13).*thermalMass(:,6).*thermalMass(:,7)*cSize);
+mCp = (thermalMass(:,10).*thermalMass(:,11).*thermalMass(:,5).*thermalMass(:,4)*cSize);
 
 dT_t = (dQ_cell.*dt)./mCp;
 
