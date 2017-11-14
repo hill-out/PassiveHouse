@@ -2,6 +2,7 @@ function [q, V] = stackVent(T_i,T_o,U)
 %T_i = 24;
 %T_o = wSTRUCT.Temp;
 %U = wSTRUCT.WSpeed;
+U = zeros(size(T_o,1),1);
 
 %Inlet (z1 and z2) and oulet (z3) heights:
 z = [1.25, 4.125, 6.5]; 

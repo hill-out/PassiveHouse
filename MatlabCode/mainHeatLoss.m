@@ -16,13 +16,15 @@ T_i = 22; %Define indoor air temperature
 [q_stack, V] = stackVent(24,wSTRUCT.Temp,wSTRUCT.WSpeed);
 %Thermal Gains: 
 load('weatherSTRUCTtry.mat');
-[q_solar] = sum(overallSolarGain(wSTRUCTtry.global,wSTRUCTtry.diffuse, [wSTRUCTtry.MONTH,wSTRUCTtry.DAY,wSTRUCTtry.HOUR],[],0.8),2);
+load('qSolar.mat');
+%[q_solar] = sum(overallSolarGain(wSTRUCTtry.global,wSTRUCTtry.diffuse, [wSTRUCTtry.MONTH,wSTRUCTtry.DAY,wSTRUCTtry.HOUR],[],0.8),2);
+
 
 load('occupancyMAT.mat')
 [q_occupancy] = occupancyGain(occupancyMAT(:,3),occupancyMAT(:,2));
 
 q_total = zeros(size(wSTRUCT.Temp,1),1);
-q = sum([q_ht q_ac q_solar q_occupancy],2);
+q = sum([q_ht q_ac qSolar q_occupancy],2);
 for i = 1:1:size(q,1)
     if q(i) < abs(q_MVHR(i))
        q_total(i) = q(i) + q_MVHR(i);
@@ -33,25 +35,29 @@ end
 
 q_total_day = sum(reshape(q_total,24,365));
 
-q_heat = sum(q_total(q_total < 0))/160;
+q_heat = sum(q_total(q_total > 0))/160;
 q_cool = sum(q_total(q_total < 0))/160;
 
+delta_T = q_total./(975*1.2);
+delta_T_day = sum(reshape(delta_T,24,365));
 
-subplot(2,1,1)
+subplot(3,1,1)
 hold on
 plot(q_ht)
 plot(q_ac)
 plot(q_MVHR)
 plot(q_MVHRbypass)
-plot(q_solar)
-plot(q_stack)
+plot(qSolar)
+%plot(q_stack)
 plot(q_total)
-legend('Heat Transfer through Envelope','Air Changes','MVHR','bypass','Solar','Stack','Total')
+legend('Heat Transfer through Envelope','Air Changes','MVHR','bypass','Solar','Total')
 hold off
 
-subplot(2,1,2)
+subplot(3,1,2)
 plot(q_total_day)
 
+subplot(3,1,3)
+plot(delta_T_day)
 
 
         
