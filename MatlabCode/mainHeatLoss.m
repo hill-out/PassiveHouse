@@ -57,7 +57,7 @@ subplot(3,1,2)
 plot(q_total_day)
 
 subplot(3,1,3)
-plot(delta_T_day)
+plot(q_stack)
 
 
         

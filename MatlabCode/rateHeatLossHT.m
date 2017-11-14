@@ -73,11 +73,12 @@ for i = 1:1:size(foundation,1)
     
     R_se = 0.04; %CIBSE A3 Floor - Downward - Normal value
     R_si = 0.17; %CIBSE A3 Floor - Downward
-    R_f = L_insul/k_insul;
+    R_insul = L_insul/k_insul;
+    R_concrete = 0.2/1.130;
     
     B = A*(0.5*pf);
     
-    d_ef = d_w + k_ground*(R_si + R_f + R_se);
+    d_ef = d_w + k_ground*(R_si + R_insul + R_concrete + R_se);
     
     U_foundation = 2/((0.457*B)+d_ef);
         
