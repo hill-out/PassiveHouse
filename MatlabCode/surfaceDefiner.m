@@ -59,19 +59,20 @@ for i = 1:numel(a)
    
         out{i} = foundation;
     elseif a(i) == 't'
-        % Thermal Mass [x,y,z,D,A,nx,ny,nz,cond,Cp,density,kr]
+        %              [1,2,3,4,5,6, 7, 8, 9,   10,11,     12,13,   14]
+        % Thermal Mass [x,y,z,A,W,nx,ny,nz,cond,Cp,density,kr,floor,furn]
         concrete = [1.130, 1000, 2000, 0.3]; % http://www.iesve.com/downloads/help/ve2012/Thermal/ApacheTables.pdf
         gFW = 0.2;
         fFW = 0.1;
         
-        thermalMass = [0, 0, 0, 10.26, gFW, 0, 0, 1, concrete; %kitchen (1)
-                       0, 0, 0, 22.5, gFW, 0, 0, 1, concrete; %dining (2)
-                       0, 0, 0, 16.11, gFW, 0, 0, 1, concrete; %library (3)
-                       0, 0, 0, 8.67, gFW, 0, 0, 1, concrete; %study (4)
-                       0, 0, 2.7, 13.71, fFW, 0, 0, 1, concrete; %bedroom 1 (5)
-                       0, 0, 2.7, 12.08, fFW, 0, 0, 1, concrete; %bedroom 2 (6)
-                       0, 0, 2.7, 8.54, fFW, 0, 0, 1, concrete; %single (7)
-                       0, 0, 2.7, 15.67, fFW, 0, 0, 1, concrete]; %master (8)
+        thermalMass = [0, 0, 0, 10.26, gFW, 0, 0, 1, concrete, 0, 0.5; %kitchen (1)
+                       0, 0, 0, 22.5, gFW, 0, 0, 1, concrete, 0, 0.3; %dining (2)
+                       0, 0, 0, 16.11, gFW, 0, 0, 1, concrete, 0, 0.3; %library (3)
+                       0, 0, 0, 8.67, gFW, 0, 0, 1, concrete, 0, 0.3; %study (4)
+                       0, 0, 2.7, 13.71, fFW, 0, 0, 1, concrete, 1, 0.3; %bedroom 1 (5)
+                       0, 0, 2.7, 12.08, fFW, 0, 0, 1, concrete, 1, 0.3; %bedroom 2 (6)
+                       0, 0, 2.7, 8.54, fFW, 0, 0, 1, concrete, 1, 0.3; %single (7)
+                       0, 0, 2.7, 15.67, fFW, 0, 0, 1, concrete, 1, 0.3]; %master (8)
                        
         
         out{i} = thermalMass;

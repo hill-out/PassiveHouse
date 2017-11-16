@@ -31,7 +31,7 @@ windows = surfaces{1}; %get the window data
 thermalMass = surfaces{2}; %get the thermal mass data
 
 nTM = size(thermalMass,1); %number of thermal masses
-initialT = 23;
+initialT = 20;
 dt = 5;
 
 stepHour = floor(3600/dt);
@@ -82,7 +82,7 @@ for i = 0:1:nTM
         
         for j = 1:size(t,1)
             for k = 1:stepHour
-                [outT, outQ] = thermalGain(tmDirIrr(j), tmDiffIrr(j), cTemp, 22, thermalMass(i,:), meshCrit, dt);
+                [outT, outQ] = thermalGain(tmDirIrr(j), tmDiffIrr(j), cTemp, 22, [], thermalMass(i,:), meshCrit, dt);
                 T{i}(:,j,k) = outT;
                 qTM(i,j,k) = outQ;
                 cTemp = outT;
