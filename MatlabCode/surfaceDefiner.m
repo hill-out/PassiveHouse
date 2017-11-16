@@ -15,26 +15,26 @@ for i = 1:numel(a)
     if a(i) == 'w'
         % Windows [x,y,z,L,H,nx,ny,nz,th]
         
-        windows = [0, 0, 0, 1.6, 1, 1, 0, 0, 1;%kitchen
-                   0, 0, 0, 2, 1, 0, -1, 0, 1;%kitchen
-                   0, 0, 0, 2, 2.06, 1, 0, 0, 2;%dining
-                   0, 0, 0, 1.3, 1, 1, 0, 0, 2;%dining
-                   0, 0, 0, 0.8, 2.92, 0, -1, 0, 2;%dining
-                   0, 0, 0, 1.3, 1, 1, 0, 0, 3;%library
-                   0, 0, 0, 1.3, 1, 1, 0, 0, 3;%library
-                   0, 0, 0, 1.3, 1, 1, 0, 0, 4;%study
-                   0, 0, 0, 1.3, 0.5, 1, 0, 0, 5;%bedroom1
+        windows = [0, 0, 0, 1.6, 1, 1, 0, 0, 1;     %kitchen
+                   0, 0, 0, 2, 1, 0, -1, 0, 1;      %kitchen
+                   0, 0, 0, 2, 2.06, 1, 0, 0, 2;    %dining
+                   0, 0, 0, 1.3, 1, 1, 0, 0, 2;     %dining
+                   0, 0, 0, 0.8, 2.92, 0, -1, 0, 2; %dining
+                   0, 0, 0, 1.3, 1, 1, 0, 0, 3;     %library
+                   0, 0, 0, 1.3, 1, 1, 0, 0, 3;     %library
+                   0, 0, 0, 1.3, 1, 1, 0, 0, 4;     %study
+                   0, 0, 0, 1.3, 0.5, 1, 0, 0, 5;   %bedroom1
                    0, 0, 0, 1.05, 1.51, cos(pi/6), 0, sin(pi/6), 5;%bedroom1
-                   0, 0, 0, 1.3, 0.5, 1, 0, 0, 6;%bedroom2
+                   0, 0, 0, 1.3, 0.5, 1, 0, 0, 6;   %bedroom2
                    0, 0, 0, 1.05, 1.51, cos(pi/6), 0, sin(pi/6), 6;%bedroom2
-                   0, 0, 0, 1.3, 0.5, 1, 0, 0, 7;%single
+                   0, 0, 0, 1.3, 0.5, 1, 0, 0, 7;   %single
                    0, 0, 0, 1.05, 1.51, cos(pi/6), 0, sin(pi/6), 7;%single
-                   0, 0, 0, 1.3, 2, 1, 0, 0, 8;%master
-                   0, 0, 0, 2, 1, 0, -1, 0, 8;%master
-                   0, 0, 0, 0.8, 1, 0, 1, 0, 0;%bathroom ground
-                   0, 0, 0, 0.8, 1, 0, 1, 0, 0;%bathroom first
-                   0, 0, 0, 3.82, 0.6, -1, 0, 0, 0;%hall first
-                   0, 0, 0, 0.7, 1, 0, 1, 0, 0];%bathroom master
+                   0, 0, 0, 1.3, 2, 1, 0, 0, 8;     %master
+                   0, 0, 0, 2, 1, 0, -1, 0, 8;      %master
+                   0, 0, 0, 0.8, 1, 0, 1, 0, 0;       %bathroom ground
+                   0, 0, 0, 0.8, 1, 0, 1, 0, 0;     %bathroom first
+                   0, 0, 0, 3.82, 0.6, -1, 0, 0, 0; %hall first
+                   0, 0, 0, 0.7, 1, 0, 1, 0, 0];    %bathroom master
             
         
         out{i} = windows;
@@ -42,20 +42,20 @@ for i = 1:numel(a)
         % Structure [x,y,z,L,H,A,nx,ny,nz,k_insul,L_insul]
         cellulose = [0.037];
         
-        structure = [0, 0, 0, 18, 5.7, 102.6, 0, 1, 0, cellulose, 0.3;          %Exterior Wall South
-                     0, 0, 0, 7, 5.7, 39.9, 1, 0, 0, cellulose, 0.3;            %Exterior Wall West
-                     0, 0, 0, 18, 5.7, 102.6, 0, -1, 0, cellulose, 0.3;         %Exterior Wall North
-                     0, 0, 0, 7, 5.7, 39.9, -1, 0, 0, cellulose, 0.3;           %Exterior Wall East
-                     0, 0, 0, 5.73, 1.2, 100.32, 0, 0, 1, cellulose, 0.3          %South Facing Roof
-                     0, 0, 0, 3.05, 1.2, 26.8, 0, 0, 1, cellulose, 0.3];          %North Facing Roof
+        structure = [0, 0, 0, 18, 5.7, 70.16, 1, 0, 0, cellulose, 0.3;          %Exterior Wall South
+                     0, 0, 0, 7, 5.7, 40.2, 0, -1, 0, cellulose, 0.3;            %Exterior Wall West
+                     0, 0, 0, 18, 5.7, 102.7, -1, 0, 0, cellulose, 0.3;         %Exterior Wall North
+                     0, 0, 0, 7, 5.7, 40.2, 0, 1, 0, cellulose, 0.3;           %Exterior Wall East
+                     0, 0, 0, 5.73, 1.2, 84, cos(pi/6), 0, sin(pi/6), cellulose, 0.3          %South Facing Roof
+                     0, 0, 0, 3.05, 1.2, 20.9, 0, 0, 1, cellulose, 0.3];          %North Facing Roof
    
         
         out{i} = structure;
     elseif a(i) == 'f'
-        % Foundation [x,y,z,L,H,A,nx,ny,nz,k_insul,L_insul] 
+        % Foundation [x,y,z,L,H,A,perimeter,nx,ny,nz,k_insul,k_ground,L_insul] 
         EPS300 = [0.033];
         
-        foundation = [0, 0, 0, 5, 17, 79.5, 0, 0, 1, EPS300, 0.3];               %EPS300 Foundation
+        foundation = [0, 0, 0, 5, 17, 79.5, 48, 0, 0, 1, EPS300, 2, 0.3];               %EPS300 Foundation
    
         out{i} = foundation;
     elseif a(i) == 't'
