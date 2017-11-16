@@ -58,13 +58,13 @@ cosAngleGS = permute(dot(normG,normS),[2,3,1]); %cos of angle of ground normal (
 
 % for 1m2 normal to the sun
 projAsun = cosAngleNS.*repmat(A,1,m)'; %@90deg = 1m2, @0deg = 0m2
-pA = (projAsun./cosAngleGS); %@low angle = big area, @ high angle = 1 area
+SPpA = (projAsun./cosAngleGS); %@low angle = big area, @ high angle = 1 area
 
 % removing areas where the sun is below the horizon
 %pA(cosAngleGS<0) = 0;
 
 % removing areas where the sun is behind the panel
-pA(cosAngleNS<0) = 0;
+SPpA(cosAngleNS<0) = 0;
 
 % removing areas where the sun angle is low (therefore inaccurate)
 aboveHorizon = cosAngleGS<0;
