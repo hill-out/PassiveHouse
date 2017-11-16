@@ -21,4 +21,9 @@ octave-workspace
 # Simulink autosave extension
 *.autosave
 .DS_Store
-MatlabCode/surfaceDefiner.m
+MatlabCode/T.mat
+
+MatlabCode/qAir.mat
+
+
+MatlabCode/qTM.mat
