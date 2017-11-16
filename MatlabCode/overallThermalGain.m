@@ -78,9 +78,8 @@ for i = 0:1:nTM
         end
         
     end
-    
+     
     qAir(i+1,:,:) = repmat(sum(refl.*(1-obs2).*dirGaini,2)+sum(refl*diffGaini,2),1,floor(3600/dt));
-    
     
 end
 
