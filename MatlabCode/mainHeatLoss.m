@@ -35,8 +35,8 @@ end
 
 q_total_day = sum(reshape(q_total,24,365));
 
-q_heat = sum(q_total(q_total > 0))/160;
-q_cool = sum(q_total(q_total < 0))/160;
+q_heat = sum(q_total(q_total < 0))/160;
+q_cool = sum(q_total(q_total > 0))/160;
 
 delta_T = q_total./(975*1.2);
 delta_T_day = sum(reshape(delta_T,24,365));

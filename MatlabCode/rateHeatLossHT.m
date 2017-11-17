@@ -65,18 +65,18 @@ for i = 1:1:size(foundation,1)
     
     % Foundation [x,y,z,L,H,A,perimeter,nx,ny,nz,k_insul,k_ground,L_insul] 
     A = foundation(i,6); %Area of foundation
-    pf = foundation(i,7); %Perimeter longth of foundation
+    pf = foundation(i,7); %Perimeter length of foundation
     k_insul = foundation(i,11);
     k_ground = foundation(i,12); %Thermal conductivity of the soil (2 = Sand or Gravel)
     L_insul = foundation(i,13);
-    d_w = 0.3; %Exterior wall thickness (m)
+    d_w = 0.0; %Exterior wall thickness (m)
     
     R_se = 0.04; %CIBSE A3 Floor - Downward - Normal value
     R_si = 0.17; %CIBSE A3 Floor - Downward
     R_insul = L_insul/k_insul;
     R_concrete = 0.2/1.130;
     
-    B = A*(0.5*pf);
+    B = A/(0.5*pf);
     
     d_ef = d_w + k_ground*(R_si + R_insul + R_concrete + R_se);
     

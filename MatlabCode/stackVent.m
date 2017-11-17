@@ -20,7 +20,7 @@ g = 9.81; %Gravity
 
 delta_rho = ((T_i - T_o)./(T_o + 273)).*rho;
 
-delta_Po = ((delta_rho.*g.*(z(3)+z(2)))-(0.5.*rho.*(U.^2).*(Cp(3)+Cp(1))))/2;
+delta_Po = ((delta_rho.*g.*(z(3)+z(2)))-(0.5.*rho.*(U.^2).*(Cp(3)+Cp(2))))/2;
 
 delta_P = zeros(8760,3);
 for i = 1:1:3

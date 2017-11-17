@@ -14,28 +14,25 @@ out = {[]};
 for i = 1:numel(a)
     if a(i) == 'w'
         % Windows [x,y,z,L,H,nx,ny,nz,th,bar]
-        
+  
         windows = [0, 0, 0, 1.6, 1, 1, 0, 0, 1, 0;     %kitchen
                    0, 0, 0, 2, 1, 0, -1, 0, 1, 0;      %kitchen
                    0, 0, 0, 2, 2.06, 1, 0, 0, 2, 0;    %dining
-                   0, 0, 0, 1.3, 1, 1, 0, 0, 2, 1;     %dining
+                   0, 0, 0, 1.3, 2.06, 1, 0, 0, 2, 1;     %dining
                    0, 0, 0, 0.8, 2.92, 0, -1, 0, 2, 0; %dining
-                   0, 0, 0, 1.3, 1, 1, 0, 0, 3, 1;     %library
-                   0, 0, 0, 1.3, 1, 1, 0, 0, 3, 1;     %library
-                   0, 0, 0, 1.3, 1, 1, 0, 0, 4, 1;     %study
-                   0, 0, 0, 1.3, 0.5, 1, 0, 0, 5, 1;   %bedroom1
-                   0, 0, 0, 1.05, 1.51, cos(pi/6), 0, sin(pi/6), 5, 0;%bedroom1
-                   0, 0, 0, 1.3, 0.5, 1, 0, 0, 6, 1;   %bedroom2
-                   0, 0, 0, 1.05, 1.51, cos(pi/6), 0, sin(pi/6), 6, 0;%bedroom2
-                   0, 0, 0, 1.3, 0.5, 1, 0, 0, 7, 1;   %single
-                   0, 0, 0, 1.05, 1.51, cos(pi/6), 0, sin(pi/6), 7, 0;%single
+                   0, 0, 0, 1.3, 2.06, 1, 0, 0, 3, 1;     %library
+                   0, 0, 0, 1.3, 2.06, 1, 0, 0, 3, 1;     %library
+                   0, 0, 0, 1.3, 2.06, 1, 0, 0, 4, 1;     %study
+                   0, 0, 0, 1.3, 1.5, 1, 0, 0, 5, 1;   %bedroom1
+                   0, 0, 0, 1.3, 1.5, 1, 0, 0, 6, 1;   %bedroom2
+                   0, 0, 0, 1.3, 1.5, 1, 0, 0, 7, 1;   %single
                    0, 0, 0, 1.3, 2, 1, 0, 0, 8, 1;     %master
                    0, 0, 0, 2, 1, 0, -1, 0, 8, 0;      %master
                    0, 0, 0, 0.8, 1, 0, 1, 0, 0, 0;       %bathroom ground
                    0, 0, 0, 0.8, 1, 0, 1, 0, 0, 0;     %bathroom first
                    0, 0, 0, 3.82, 0.6, -1, 0, 0, 0, 0; %hall first
-                   0, 0, 0, 0.7, 1, 0, 1, 0, 0, 0];    %bathroom master
-            
+                   0, 0, 0, 0.7, 1, 0, 1, 0, 0, 0;    %bathroom master
+                   0, 0, 0, 9, 0.2, 0, 0, 0, 1, 0];   %Stack 
         
         out{i} = windows;
     elseif a(i) == 's'
@@ -55,7 +52,7 @@ for i = 1:numel(a)
         % Foundation [x,y,z,L,H,A,perimeter,nx,ny,nz,k_insul,k_ground,L_insul] 
         EPS300 = [0.033];
         
-        foundation = [0, 0, 0, 5, 17, 79.5, 48, 0, 0, 1, EPS300, 2, 0.3];               %EPS300 Foundation
+        foundation = [0, 0, 0, 5, 17, 82.76, 48, 0, 0, 1, EPS300, 1.5, 0.3];               %EPS300 Foundation
    
         out{i} = foundation;
     elseif a(i) == 't'
