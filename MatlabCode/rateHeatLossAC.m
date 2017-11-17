@@ -1,4 +1,4 @@
-function [q_ac] = rateHeatLossAC(T_i,T_o,foundation)
+function [q_ac,m_dot_ave] = rateHeatLossAC(T_i,T_o,foundation)
 
 % Heat loss due to air changes (with an airtightness of 0.6ac/h @50Pa
 %pressure difference. 

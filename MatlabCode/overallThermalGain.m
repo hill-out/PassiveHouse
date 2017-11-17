@@ -24,14 +24,13 @@ end
 if nargin < 5 || isempty(wallLayerThickness)
     wallLayerThickness = 0.01; %m
 end
-
 %% get the surfaces
 surfaces = surfaceDefiner('wt'); %get windows and thermal mass
 windows = surfaces{1}; %get the window data
 thermalMass = surfaces{2}; %get the thermal mass data
 
 nTM = size(thermalMass,1); %number of thermal masses
-initialT = 23;
+initialT = 20;
 dt = 5;
 
 stepHour = floor(3600/dt);
@@ -82,7 +81,7 @@ for i = 0:1:nTM
         
         for j = 1:size(t,1)
             for k = 1:stepHour
-                [outT, outQ] = thermalGain(tmDirIrr(j), tmDiffIrr(j), cTemp, 22, thermalMass(i,:), meshCrit, dt);
+                [outT, outQ] = thermalGain(tmDirIrr(j), tmDiffIrr(j), cTemp, 22, [], thermalMass(i,:), meshCrit, dt);
                 T{i}(:,j,k) = outT;
                 qTM(i,j,k) = outQ;
                 cTemp = outT;
@@ -90,9 +89,8 @@ for i = 0:1:nTM
         end
         
     end
-    
+     
     qAir(i+1,:,:) = repmat(sum(refl.*(1-obs2).*dirGaini,2)+sum(refl*diffGaini,2),1,floor(3600/dt));
-    
     
 end
 
@@ -102,29 +100,5 @@ qHour(1,:) = mean(qAir(1,:,:),3);
 for i=1:1:nTM
     qHour(i+1,:) = mean(qAir(i+1,:,:),3) + mean(qTM(i,:,:),3);
 end
-
-
-    function [y] = findSpacing(m, l)
-        y = fzero(@(x)(m(x)-l),l);
-    end
-
-    function [y] = smartMesh(x, xb, yb)
-        % smart mesh makes the mesh smaller closer to the start
-        % all inputs are columns
-        % used in thermalGain
-        
-        a = [xb,yb];
-        a = sort(a,1);
-        
-        b = repmat(x,1,size(a,1))>repmat(a(:,1)',size(x,1),1);
-        
-        c = sum(b,2);
-        c(c==0)=1;
-        
-        d = ((x-xb(c))./(xb(c+1)-xb(c)));
-        
-        y = d.*(yb(c+1)-yb(c))+yb(c);
-    end
-
 
 end
