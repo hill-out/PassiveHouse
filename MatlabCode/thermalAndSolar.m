@@ -16,11 +16,15 @@ function [qSolarAir, qThermalAir, qFoundation, T] = thermalAndSolar(globalIrr, d
 % qFoundation - energy loss from the foundation
 % T - new T of thermal masss
 
-if nargin < 5 || isempty(g)
+if nargin < 5 || isempty(Ti)
+    Ti = 22;
+end
+
+if nargin < 6 || isempty(g)
     g = 0.8;
 end
 
-if nargin < 6 || isempty(Tg)
+if nargin < 7 || isempty(Tg)
     Tg = 7;
 end
 
@@ -37,6 +41,10 @@ nTM = size(thermalMass,1); %number of thermal masses
 meshLimX = [0:0.01:1]';
 meshLimY = [[4*[0:0.01:0.5].^3,(1+4*([0.01:0.01:0.5]-0.5).^(3))]*0.7+[0:0.01:1]*0.3]';
 meshCrit = @(x)(smartMesh(x,meshLimX,meshLimY));
+
+if nargin < 4 || isempty(cTemp)
+    cTemp = cell(nTM,1);
+end
 
 T = cell(nTM,1);
 qThermalAir = zeros(nTM,1);
@@ -65,6 +73,8 @@ for i = 0:1:nTM
         
         tmDirIrr = sum(tmDirGaini,2); % total direct irradiation from all windows
         tmDiffIrr = sum(tmDiffGaini,2); % total diffuse irradiation from all windows
+        
+
         
         [a, b, c] = thermalGain(tmDirIrr, tmDiffIrr, cTemp{i}, Ti, Tg, thermalMass(i,:), meshCrit, dt);
         
