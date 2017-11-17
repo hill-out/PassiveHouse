@@ -35,7 +35,7 @@ for i = 1:numel(a)
                    0, 0, 0, 0.8, 1, 0, 1, 0, 0;     %bathroom first
                    0, 0, 0, 3.82, 0.6, -1, 0, 0, 0; %hall first
                    0, 0, 0, 0.7, 1, 0, 1, 0, 0];    %bathroom master
-            
+        windows(:,4)=windows(:,4).*2;
         
         out{i} = windows;
     elseif a(i) == 's'
@@ -55,7 +55,7 @@ for i = 1:numel(a)
         % Foundation [x,y,z,L,H,A,perimeter,nx,ny,nz,k_insul,k_ground,L_insul] 
         EPS300 = [0.033];
         
-        foundation = [0, 0, 0, 5, 17, 79.5, 48, 0, 0, 1, EPS300, 2, 0.3];               %EPS300 Foundation
+        foundation = [0, 0, 0, 5, 17, 82.76, 48, 0, 0, 1, EPS300, 1.5, 0.3];               %EPS300 Foundation
    
         out{i} = foundation;
     elseif a(i) == 't'
