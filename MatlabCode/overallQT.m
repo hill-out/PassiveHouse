@@ -15,6 +15,9 @@ stepHour = floor(3600/dt); %time steps per hour
 
 load('weatherSTRUCTtry.mat')
 
+load('occupancyMAT.mat') %get occupancy data
+[q_occupancy] = occupancyGain(occupancyMAT(:,3),occupancyMAT(:,2));
+
 %% get surface info
 surfaces = surfaceDefiner('wsft');
 window = surfaces{1};
@@ -52,6 +55,11 @@ if buffer > 0
         % get hourly data
         globalIrr = wSTRUCTtry.global(hour);
         diffIrr = wSTRUCTtry.diffuse(hour);
+        To = wSTRUCTtry.Temp;
+        windSpeed = wSTRUCTtry.WSpeed;
+        [Pr, Nu, k] = assignPRandNU(wSTRUCT);
+        newStructure = windowfromstructure(structure,window);
+        
         t = [wSTRUCTtry.MONTH(hour),wSTRUCTtry.DAY(hour),wSTRUCTtry.HOUR(hour)];
         Tg = tempOfGround(hour);
         
@@ -61,9 +69,14 @@ if buffer > 0
             [qSolarAir, qThermalAir, qFoundation, T] = thermalAndSolar(globalIrr, diffIrr, t, dt, cTemp, Ti, g, Tg);
             
             % run other heat losses
+            qHeatTransfer = sum(rateHeatLossHT(To,windSpeed,Ti,Pr,Nu,k,newStructure,window,foundation,2);
+            qTightness = rateHeatLossAC(Ti,To,foundation);
+            qMVHR = rateHeatLossMVHR(To,Ti,240,0.9);
             
+            [q_MVHRbypass] = rateHeatLossMVHRbypass(wSTRUCT.Temp,T_i,240);
+            [q_stack, V] = stackVent(24,wSTRUCT.Temp,wSTRUCT.WSpeed);
             
-            
+            qOccupancy = q_occupancy(hour)
         end
     end
     
