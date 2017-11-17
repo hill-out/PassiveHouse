@@ -6,7 +6,7 @@ load('weatherSTRUCT.mat')
 [swf] = surfaceDefiner('swf');
 [s] = windowfromstructure(swf{1},swf{2});
 T_i = 22; %Define indoor air temperature
-
+Area = 171; % floor area (m^2)
 %Thermal Losses:
 
 [q_ht] = sum(rateHeatLossHT(wSTRUCT.Temp,wSTRUCT.WSpeed,T_i,Pr,nu,k,s,swf{2},swf{3}),2);
@@ -35,8 +35,8 @@ end
 
 q_total_day = sum(reshape(q_total,24,365));
 
-q_heat = sum(q_total(q_total < 0))/160;
-q_cool = sum(q_total(q_total > 0))/160;
+q_heat = sum(q_total(q_total < 0))/Area;
+q_cool = sum(q_total(q_total > 0))/Area;
 
 delta_T = q_total./(975*1.2);
 delta_T_day = sum(reshape(delta_T,24,365));
