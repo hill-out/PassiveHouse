@@ -54,14 +54,17 @@ qSolarAir = zeros(nTM+1,1);
 for i = 0:1:nTM
     
     wi = windows(windows(:,9)==i,:); %find the windows for the current i
-    [occOut, occIn] = occlusion(solarAcart, wi, thermalMass(:,13), thermalMass(:,14));
-    occOuti = occOut(windows(:,9)==i,:);
-    occIni = occIn(windows(:,9)==i,:);
+    if i == 0
+        occOuti = 1;
+        occIni = 1;
+    else
+        [occOuti, occIni] = occlusion(solarAcart, wi, thermalMass(i,13));
+    end
     
     [~, dirGaini, diffGaini] = overallSolarGain(globalIrr, diffIrr, t, wi, g);
     
-    oDirGaini = occOuti.*dirGaini;
-    oDiffGaini = diffGaini; %ignore outside factors for diffuse
+    oDirGaini = occOuti.*dirGaini';
+    oDiffGaini = diffGaini'; %ignore outside factors for diffuse
     
     if i == 0
         refl = 1; %reflectivity
@@ -71,8 +74,8 @@ for i = 0:1:nTM
         tmDirGaini = (1-refl).*occIni.*oDirGaini; % direct energy hitting thermal mass
         tmDiffGaini = (1-refl).*occIni.*oDiffGaini; % diffuse energy hitting thermal mass
         
-        tmDirIrr = sum(tmDirGaini,2); % total direct irradiation from all windows
-        tmDiffIrr = sum(tmDiffGaini,2); % total diffuse irradiation from all windows
+        tmDirIrr = sum(tmDirGaini); % total direct irradiation from all windows
+        tmDiffIrr = sum(tmDiffGaini); % total diffuse irradiation from all windows
         
 
         
@@ -83,8 +86,8 @@ for i = 0:1:nTM
         qFoundation(i) = c;
     end
     
-    dirAir = (1-(1-refl).*occIni).*oDirGaini;
-    diffAir = (1-(1-refl).*occIni).*oDiffGaini;
+    dirAir = sum((1-(1-refl).*occIni).*oDirGaini);
+    diffAir = sum((1-(1-refl).*occIni).*oDiffGaini);
     
     qSolarAir(i+1) = dirAir + diffAir;
 end
