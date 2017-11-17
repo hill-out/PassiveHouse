@@ -1,4 +1,4 @@
-function [out, in] = occlusion(sunA, window, barrier, furnature)
+function [out, in] = occlusion(sunA, window, furnature)
 % occlusion is a function that calculates how much sun is blocked inside
 % and outside
 % 
@@ -15,6 +15,7 @@ function [out, in] = occlusion(sunA, window, barrier, furnature)
 [az,el,~] = cart2sph(sunA(:,1),sunA(:,2),sunA(:,3)); %calc elevation
 
 % Barrier calculation
+barrier = window(:,10);
 
 barSpace = 0.300; %m
 barWidth = 0.020; %m

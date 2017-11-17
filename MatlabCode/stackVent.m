@@ -1,4 +1,4 @@
-function [q, V] = stackVent(T_i,T_o,U)
+function [q, V] = stackVent(T_i,T_o,U,A)
 %T_i = 24;
 %T_o = wSTRUCT.Temp;
 %U = wSTRUCT.WSpeed;
@@ -6,7 +6,10 @@ U = zeros(size(T_o,1),1);
 
 %Inlet (z1 and z2) and oulet (z3) heights:
 z = [1.25, 4.125, 6.5]; 
-A = [2, 2, 1.8];
+
+if nargin < 4 || isempty(A)
+    A = [2, 2, 1.8];
+end
 
 Cp = [0.25, 0.25, -0.1]; 
 Cd = [0.61, 0.61, 0.61];
