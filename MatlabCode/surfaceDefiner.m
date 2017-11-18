@@ -35,7 +35,6 @@ for i = 1:numel(a)
                    0, 0, 0, 9, 0.2, -1, 0, 0, 0, 0];   %Stack 
         
                
-        windows(:,4) = windows(:,4)/2;
         out{i} = windows;
     elseif a(i) == 's'
         % Structure [x,y,z,L,H,A,nx,ny,nz,k_insul,L_insul]

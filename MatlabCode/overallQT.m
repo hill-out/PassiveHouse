@@ -11,15 +11,19 @@ topCellSize = 0.005; %m
 dt = 5; %s
 g = 0.8;
 stepHour = floor(3600/dt); %time steps per hour
-qHeat = zeros(stepHour+1,1);
+
 Ti = zeros(stepHour+1,1);
 Ti(1) = 22;
+Tw = zeros(stepHour+1,1);
+Tw(1) = 22;
+
+qHeat = zeros(stepHour+1,1);
 qTotal = zeros(stepHour,1);
+
 A = [0,0,0]; % area of window opennings
 hCeiling = 2.5;
 bypass = 0;
 Tbuffi = zeros(buffer,stepHour+1);
-
 
 load('weatherSTRUCTtry.mat')
 
@@ -91,8 +95,11 @@ if buffer > 0
         for j = 1:stepHour
             
             % run solar and thermal mass stuff
-            [qSolarAir, qThermalAir, ~, T] = thermalAndSolar(globalIrr, diffIrr, t, dt, cTemp, Ti(j), g, Tg, window, thermalMass, solarAcart, meshCrit, dirGain, diffGain);
+            [qSolar, qThermalAir, ~, T] = thermalAndSolar(globalIrr, diffIrr, t, dt, cTemp, Ti(j), g, Tg, window, thermalMass, solarAcart, meshCrit, dirGain, diffGain);
             cTemp = T;
+            
+            [T, qSolarAir] = qThermalStructure(Ti(j), Tw(j), qSolar);
+            Tw(j+1) = T;
             % run other heat losses
             qHeatTransfer = sum(rateHeatLossHT(To,windSpeed,Ti(j),Pr,Nu,k,newStructure,window,foundation),2);
             qTightness = rateHeatLossAC(Ti(j),To,foundation);
@@ -111,12 +118,16 @@ if buffer > 0
                 qStack = 0;
                 vStack = 0;
             end
+            
+            
+            
+            
             % total losses
             qTotalLoss = qHeatTransfer+qTightness+qMVHR+qStack;
             qTotalGain = qOccupancy+qSolarAir+qThermalAir+qHeat(j+1);
             qTotal(j) = qTotalLoss+qTotalGain;
             %new temperautre inside
-            Ti(j+1) = Ti(j) + qTotal(j).*dt/(7500*1000);
+            Ti(j+1) = Ti(j) + qTotal(j).*dt/(600*1000);
             
             if Ti(j+1) > 23
                 bypass = 1;
