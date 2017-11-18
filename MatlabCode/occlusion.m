@@ -25,7 +25,7 @@ x = barDepth.*tan(ones(size(barrier))*el);
 blockage = 1-barrier.*(x+barWidth)./barSpace;
 out = max([zeros(size(blockage)),min([ones(size(blockage)),blockage]')']')';
 
-out(~blockage) = 1;
+out(~barrier) = 1;
 
 %% calculate stuff blocking indoor light from thermal mass
 
