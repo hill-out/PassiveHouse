@@ -32,7 +32,7 @@ for i = 1:numel(a)
                    0, 0, 0, 0.8, 1, 0, 1, 0, 0, 0;     %bathroom first
                    0, 0, 0, 3.82, 0.6, -1, 0, 0, 0, 0; %hall first
                    0, 0, 0, 0.7, 1, 0, 1, 0, 0, 0;    %bathroom master
-                   0, 0, 0, 9, 0.2, 0, 0, 0, 1, 0];   %Stack 
+                   0, 0, 0, 9, 0.2, -1, 0, 0, 0, 0];   %Stack 
         
         out{i} = windows;
     elseif a(i) == 's'

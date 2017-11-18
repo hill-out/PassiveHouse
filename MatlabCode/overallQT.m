@@ -14,10 +14,11 @@ stepHour = floor(3600/dt); %time steps per hour
 Ti = zeros(stepHour+1,1);
 Ti(1) = 22;
 qTotal = zeros(stepHour,1);
+qHeat = 0;
 A = [0,0,0]; % area of window opennings
 hCeiling = 2.5;
 bypass = 0;
-tBuffi = zeros(buffer,stepHour);
+Tbuffi = zeros(buffer,stepHour+1);
 
 
 load('weatherSTRUCTtry.mat')
@@ -80,6 +81,12 @@ if buffer > 0
         
         [~, dirGain, diffGain] = overallSolarGain(globalIrr, diffIrr, t, window, g);
         
+        if mod(hour,24) < 8
+            Ts = 17;
+        else
+            Ts = 22;
+        end
+        
         %run for all steps in hour
         for j = 1:stepHour
             
@@ -95,6 +102,8 @@ if buffer > 0
             else
                 qMVHR = rateHeatLossMVHR(To,Ti(j),240,0.9);
             end
+            [A, qHeat] = controller(Ts, Ti(j), qHeat);
+            
             if any(A~=0)
                 [qStack, vStack] = stackVent(Ti(j),To,windSpeed,A);
                 qStack = qStack(1);
@@ -104,21 +113,17 @@ if buffer > 0
             end
             % total losses
             qTotalLoss = qHeatTransfer+qTightness+qMVHR+qStack;
-            qTotalGain = qOccupancy+qSolarAir+qThermalAir;
+            qTotalGain = qOccupancy+qSolarAir+qThermalAir+qHeat;
             qTotal(j) = qTotalLoss+qTotalGain;
             %new temperautre inside
             Ti(j+1) = Ti(j) + qTotal(j).*dt/(20000*1000);
+            
             if Ti(j+1) > 23
                 bypass = 1;
             elseif Ti(j+1) < 22
                 bypass = 0;
             end
             
-            if Ti(j+1) > 24
-                A = [0, 0, 0];
-            elseif Ti(j+1) < 23
-                A = [0, 0, 0];
-            end
         end
         
         Tbuffo(i-tStart+buffer+1) = To;
