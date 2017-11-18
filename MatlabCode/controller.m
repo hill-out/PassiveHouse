@@ -12,13 +12,13 @@ function [A, qHeat] = controller(Ts, Ti, qH)
 
 houseArea = 82.76*2;
 qHeatm2 = (Ts - Ti)*2;
-A = [0, 0, -(23 - Ti)*0.4];
+A = [0, 0, -(23 - Ti)*0.1];
 
 dT = (Ts - Ti);
 
 if dT > 1
-    if qHeatm2 > 10
-        qHeatm2 = 10;
+    if qHeatm2 > 5
+        qHeatm2 = 5;
     end
     qHeat = qHeatm2*houseArea;
 elseif dT < 0

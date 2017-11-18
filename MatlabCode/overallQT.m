@@ -11,10 +11,10 @@ topCellSize = 0.005; %m
 dt = 5; %s
 g = 0.8;
 stepHour = floor(3600/dt); %time steps per hour
+qHeat = zeros(stepHour+1,1);
 Ti = zeros(stepHour+1,1);
 Ti(1) = 22;
 qTotal = zeros(stepHour,1);
-qHeat = 0;
 A = [0,0,0]; % area of window opennings
 hCeiling = 2.5;
 bypass = 0;
@@ -102,7 +102,7 @@ if buffer > 0
             else
                 qMVHR = rateHeatLossMVHR(To,Ti(j),240,0.9);
             end
-            [A, qHeat] = controller(Ts, Ti(j), qHeat);
+            [A, qHeat(j+1)] = controller(Ts, Ti(j), qHeat(j));
             
             if any(A~=0)
                 [qStack, vStack] = stackVent(Ti(j),To,windSpeed,A);
@@ -113,10 +113,10 @@ if buffer > 0
             end
             % total losses
             qTotalLoss = qHeatTransfer+qTightness+qMVHR+qStack;
-            qTotalGain = qOccupancy+qSolarAir+qThermalAir+qHeat;
+            qTotalGain = qOccupancy+qSolarAir+qThermalAir+qHeat(j+1);
             qTotal(j) = qTotalLoss+qTotalGain;
             %new temperautre inside
-            Ti(j+1) = Ti(j) + qTotal(j).*dt/(20000*1000);
+            Ti(j+1) = Ti(j) + qTotal(j).*dt/(7500*1000);
             
             if Ti(j+1) > 23
                 bypass = 1;
@@ -130,6 +130,12 @@ if buffer > 0
         Tbuffi(i-tStart+buffer+1,:) = Ti;
         qBuffMean(i-tStart+buffer+1) = mean(qTotal);
         qBuffPeak(i-tStart+buffer+1) = max(qTotal);
+        
+        qHeating(i-tStart+buffer+1)=mean(qHeat);
+        
+        newQ = qHeat(end);
+        qHeat = zeros(stepHour+1,1);
+        qHeat(1) = newQ;
         
         newT = Ti(end);
         Ti = zeros(stepHour+1,1);
