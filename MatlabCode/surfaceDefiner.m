@@ -11,6 +11,7 @@ function [out] = surfaceDefiner(a)
 % t - thermal mass [incomplete]
 %
 out = {[]};
+ang = 30;
 for i = 1:numel(a)
     if a(i) == 'w'
         % Windows [x,y,z,L,H,nx,ny,nz,th,bar]
@@ -34,6 +35,8 @@ for i = 1:numel(a)
                    0, 0, 0, 0.7, 1, 0, 1, 0, 0, 0;    %bathroom master
                    0, 0, 0, 9, 0.2, 0, 0, 1, 0, 0];   %Stack
         
+        windows(:,6:8) = windows(:,6:8)*rotz(ang);
+        
         out{i} = windows;
     elseif a(i) == 's'
         % Structure [x,y,z,L,H,A,nx,ny,nz,k_insul,L_insul]
@@ -45,7 +48,8 @@ for i = 1:numel(a)
                      0, 0, 0, 7, 5.7, 40.2, 0, 1, 0, cellulose, 0.3;           %Exterior Wall East
                      0, 0, 0, 5.73, 1.2, 84, cos(pi/6), 0, sin(pi/6), cellulose, 0.3          %South Facing Roof
                      0, 0, 0, 3.05, 1.2, 20.9, 0, 0, 1, cellulose, 0.3];          %North Facing Roof
-   
+        
+        structure(:,7:9) = structure(:,7:9)*rotz(ang);
         
         out{i} = structure;
     elseif a(i) == 'f'
@@ -71,6 +75,7 @@ for i = 1:numel(a)
                        0, 0, 2.7, 8.54, fFW, 0, 0, 1, concrete, 1, 0.3; %single (7)
                        0, 0, 2.7, 15.67, fFW, 0, 0, 1, concrete, 1, 0.3]; %master (8)
                        
+        thermalMass(:,6:8) = thermalMass(:,6:8)*rotz(ang);
         
         out{i} = thermalMass;
     else
