@@ -40,15 +40,18 @@ if all(structure(i,7:9)) == all([1,0,0]) || all([0,-1,0]) || all([0,1,0]) %South
     R_se = 0.04; %CIBSE A3 Wall - Horizontal - Normal value
     R_si = 0.13; %CIBSE A3 Wall - Horizontal
 % Find U value for given wall segment, at time t. 
-    U = 1./((R_se)+(L_insul./k_insul)+(R_si));
+    %U = 1./((R_se)+(L_insul./k_insul)+(R_si));
+    U = 0.128; %Changed U-values to match walls (celluslose + 20mm EPS)
 elseif all(structure(i,7:9) == [-1,0,0]) %North facing wall
     R_se = 0.06; %External Surface Resistance: CIBSE A3 Wall - Horizontal - Sheltered  
     R_si = 0.13; %Internal Surface Reistance: CIBSE A3 Wall - Horizontal
-    U = 1./((R_se)+(L_insul./k_insul)+(R_si));
+    %U = 1./((R_se)+(L_insul./k_insul)+(R_si));
+    U = 0.127; %Changed U-values to match walls (celluslose + 20mm EPS)
 else %Roof
     R_se = 0.02; %External Surface Resistance: CIBSE A3 Wall - Upward - Exposed  
     R_si = 0.10; %Internal Surface Reistance: CIBSE A3 Roof (Flat or Pitched) - Upward
-    U = 1./((0.06)+(L_insul./k_insul)+(0.10));
+    %U = 1./((0.06)+(L_insul./k_insul)+(0.10));
+    U = 0.123; %Changed U-values to match walls (celluslose + 20mm EPS)
 end
 % Rate of heat loss through walls, negetive for flows out of the home.  
 q_ht_structure{:,i} = U.*A.*(T_o-T_i);
@@ -69,7 +72,7 @@ for i = 1:1:size(foundation,1)
     k_insul = foundation(i,11);
     k_ground = foundation(i,12); %Thermal conductivity of the soil (2 = Sand or Gravel)
     L_insul = foundation(i,13);
-    d_w = 0.0; %Exterior wall thickness (m)
+    d_w = 0.3; %Exterior wall thickness (m)
     
     R_se = 0.04; %CIBSE A3 Floor - Downward - Normal value
     R_si = 0.17; %CIBSE A3 Floor - Downward
