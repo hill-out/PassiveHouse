@@ -4,6 +4,7 @@ Cp_rho = 0.333;
 rho = 1.2;
 Cp=1;
 P_el = 43;
+rho = 1.2;
 
 T_exhaust = T_i + (P_el./(extract_rate.*Cp_rho)) - eff_HR.*(T_i - T_o);
 

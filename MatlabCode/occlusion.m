@@ -4,9 +4,7 @@ function [out, in] = occlusion(sunA, window, furnature)
 % 
 % sunA - sun angle [cart]
 % window - vector of the current window [mx9]
-% barrier - outside barriers [1 = have, 0 = not have] - south facing
 % furnature - inside barriers (1 = no barrier)
-% refl - reflectance of the surface
 % 
 % occFactor - occlusion factor [1x2] [in, out]
 
@@ -21,12 +19,13 @@ barSpace = 0.300; %m
 barWidth = 0.020; %m
 barDepth = 0.200; %m
 
+
 x = barDepth.*tan(ones(size(barrier))*el);
 
-blockage = barrier.*(x+barWidth)./barSpace;
+blockage = 1-barrier.*(x+barWidth)./barSpace;
 out = max([zeros(size(blockage)),min([ones(size(blockage)),blockage]')']')';
 
-out(~barrier) = 1;
+out(~blockage) = 1;
 
 %% calculate stuff blocking indoor light from thermal mass
 

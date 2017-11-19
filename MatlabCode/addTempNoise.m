@@ -1,16 +1,17 @@
-function [nT] = addTempNoise(T, step)
+function [nIrr] = addIrrNoise(Irr, step)
 % converts temperature data into noisy data
 %
-% T - temperautre [nx1]
+% Irr - temperautre [nx1]
 % step - step 
 %
 % nT - noisy T
-x = 0:1:(numel(T)+1);
-xx = 0:(1/step):((numel(T)+1));
+x = 0:1:(numel(Irr)+1);
+xx = 0:(1/step):((numel(Irr)+1));
 
-T = [T(1); T; T(end)];
-TT = spline(x,T,xx);
+Irr = [Irr(1); Irr; Irr(end)];
+IrrIrr = spline(x,Irr,xx);
 
-nT = awgn(TT+273,10)-273;
-nT = nT(step:end-1);
+nIrr = awgn(IrrIrr,1);
+nIrr = nIrr(1:end-step);
+
 end
