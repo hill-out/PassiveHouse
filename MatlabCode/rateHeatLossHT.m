@@ -72,7 +72,7 @@ for i = 1:1:size(foundation,1)
     k_insul = foundation(i,11);
     k_ground = foundation(i,12); %Thermal conductivity of the soil (2 = Sand or Gravel)
     L_insul = foundation(i,13);
-    d_w = 0.0; %Exterior wall thickness (m)
+    d_w = 0.3; %Exterior wall thickness (m)
     
     R_se = 0.04; %CIBSE A3 Floor - Downward - Normal value
     R_si = 0.17; %CIBSE A3 Floor - Downward
