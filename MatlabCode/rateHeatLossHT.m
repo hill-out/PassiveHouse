@@ -36,13 +36,13 @@ for i = 1:1:size(structure,1)
 % Define indoor coeffecient of convective heat transfer
 %h_i = 2;
 
-if all(structure(i,7:9)) == all([1,0,0]) || all([0,-1,0]) || all([0,1,0]) %South/East/West facing wall 
+if all(structure(i,7:9)) == all([1,0,0]*rotz(30)) || all([0,-1,0]*rotz(30)) || all([0,1,0]*rotz(30)) %South/East/West facing wall 
     R_se = 0.04; %CIBSE A3 Wall - Horizontal - Normal value
     R_si = 0.13; %CIBSE A3 Wall - Horizontal
 % Find U value for given wall segment, at time t. 
     %U = 1./((R_se)+(L_insul./k_insul)+(R_si));
     U = 0.128; %Changed U-values to match walls (celluslose + 20mm EPS)
-elseif all(structure(i,7:9) == [-1,0,0]) %North facing wall
+elseif all(structure(i,7:9) == [-1,0,0]*rotz(30)) %North facing wall
     R_se = 0.06; %External Surface Resistance: CIBSE A3 Wall - Horizontal - Sheltered  
     R_si = 0.13; %Internal Surface Reistance: CIBSE A3 Wall - Horizontal
     %U = 1./((R_se)+(L_insul./k_insul)+(R_si));
