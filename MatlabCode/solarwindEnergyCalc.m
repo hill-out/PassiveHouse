@@ -1,9 +1,21 @@
 clear; clc;
-%The script will load the wind data and calculate the daily wind power
-%generated
+%The script will load the weather data data and calculate the solar and
+%wind power generated
+
+%Progress:
+%   Wind power calculation      - Complete
+%   Solar power calculation     - Complete
+%   Produce stacked bar chart   - Incomplete
+
+
+%To do next:
+%- Produce a stack bar chart using the month with the lowest power
+%   generated for solar, wind power will match that month
+
+
 
 %Load weather data
-load('weatherSTRUCT.mat');
+load('weatherSTRUCTtry.mat');
 
 %Cumulative day of year
 Jan = 31;
@@ -22,6 +34,8 @@ Dec = 365;
 %Constants
 airDensity = 1.23; %kg/m3
 
+
+%%%%%%%%% Calculate Wind Power %%%%%%%%%%
 %Turbine specs
 %Reference:
 %http://renewabledevices.com/rd-swift-turbines/technical/
@@ -40,7 +54,7 @@ A = pi*(d/2)^2;
 %Calculate wind power
 %Assuming wind speed is constant for one full hour
 %Thus the power output will be in kWh
-windSpeedData = wSTRUCT.WSpeed;
+windSpeedData = wSTRUCTtry.WSpeed;
 s = size(windSpeedData);
 windPower = zeros(s(1),1);
 
@@ -57,12 +71,12 @@ for i = 1:s(1)
     end
 end
 
-%Calculate hourly, daily, and total power generated
+%Calculate hourly, daily, and total WIND power generated
 WPhourly = reshape(windPower,24,365);
 WPdaily = sum(WPhourly);
 WPtotal = sum(WPdaily);
 
-%Monthly power generated
+%Monthly WIND power generated
 WPmonth(1) = sum(WPdaily(:,1:Jan));
 WPmonth(2) = sum(WPdaily(:,Jan+1:Feb));
 WPmonth(3) = sum(WPdaily(:,Feb+1:Mar));
@@ -76,9 +90,26 @@ WPmonth(10) = sum(WPdaily(:,Sep+1:Oct));
 WPmonth(11) = sum(WPdaily(:,Oct+1:Nov));
 WPmonth(12) = sum(WPdaily(:,Nov+1:Dec));
 
-bar(WPmonth);title('Monthly Wind Power Generated');...
-    xlabel('Months');ylabel('Power (kWh/month)');
+% bar(WPmonth);title('Monthly Wind Power Generated');...
+%     xlabel('Months');ylabel('Power (kWh/month)');
 
-%To do next:
-%- Produce a stack bar chart using the month with the lowest power
-%   generated for solar, wind power will match that month
+
+%Calculate hourly, daily, and total SOLAR power generated
+solarPower = overallPVOut(wSTRUCTtry.global,wSTRUCTtry.diffuse, [wSTRUCTtry.MONTH,wSTRUCTtry.DAY,wSTRUCTtry.HOUR],[]);
+SPhourly = reshape(solarPower,24,365);
+SPdaily = sum(SPhourly);
+SPtotal = sum(SPdaily);
+
+%Monthly WIND power generated
+SPmonth(1) = sum(SPdaily(:,1:Jan));
+SPmonth(2) = sum(SPdaily(:,Jan+1:Feb));
+SPmonth(3) = sum(SPdaily(:,Feb+1:Mar));
+SPmonth(4) = sum(SPdaily(:,Mar+1:Apr));
+SPmonth(5) = sum(SPdaily(:,Apr+1:May));
+SPmonth(6) = sum(SPdaily(:,May+1:Jun));
+SPmonth(7) = sum(SPdaily(:,Jun+1:Jul));
+SPmonth(8) = sum(SPdaily(:,Jul+1:Aug));
+SPmonth(9) = sum(SPdaily(:,Aug+1:Sep));
+SPmonth(10) = sum(SPdaily(:,Sep+1:Oct));
+SPmonth(11) = sum(SPdaily(:,Oct+1:Nov));
+SPmonth(12) = sum(SPdaily(:,Nov+1:Dec));
