@@ -90,7 +90,7 @@ q_ht_foundation{:,i} = U_foundation.*A.*(T_o-T_i);
 end
 
 q_ht_foundation = cell2mat(q_ht_foundation);
-
+q_ht_foundation = q_ht_foundation*0;
 %----------------------------------------------------------%
 
 % Find heat flow through windows for 
