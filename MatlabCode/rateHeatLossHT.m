@@ -103,5 +103,6 @@ q_ht_windows = cell2mat(q_ht_windows);
 
 % Combine structure, foundation, windows and ac heat loss matrices:
 
-q_ht = [q_ht_structure q_ht_foundation q_ht_windows];
+%q_ht = [q_ht_structure q_ht_foundation q_ht_windows];
+q_ht = [q_ht_structure q_ht_windows];
 end

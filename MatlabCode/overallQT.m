@@ -20,6 +20,7 @@ Tw(1) = 22;
 
 qHeat = zeros(stepHour+1,1);
 qTotal = zeros(stepHour,1);
+vMVHR = 240;
 
 A = [0,0,0]; % area of window opennings
 hCeiling = 2.5;
@@ -42,6 +43,7 @@ volHouse = foundation(1,6)*(2*hCeiling);
 
 %% initialise current temperature
 tStart = findCurrentHour(t1); %hour of the first iteration
+tEnd = findCurrentHour(t2);
 
 Tgroundi = tempOfGround(tStart-buffer);
 
@@ -95,10 +97,12 @@ if buffer > 0
         
         
         
-        if mod(hour,24) < 8 || mod(hour,24)>22
-            Ts = 18;
+        if mod(hour,24)<8 || mod(hour,24)>23
+            Tst = 21.4;
+            Tsb = 17;
         else
-            Ts = 21;
+            Tst = 21.4;
+            Tsb = 20.6;
         end
         
         
@@ -125,47 +129,54 @@ if buffer > 0
             
             % run other heat losses
             qHeatTransfer = sum(rateHeatLossHT(To,windSpeed,Ti(j),Pr,Nu,k,newStructure,window,foundation),2);
-            qTightness = rateHeatLossAC(Ti(j),To,foundation);
+            [qTightness, vAC] = rateHeatLossAC(Ti(j),To,foundation);
             qOccupancy = q_occupancy(hour);
-            if bypass
-                qMVHR = rateHeatLossMVHRbypass(To,Ti(j),240);
+            
+            if vMVHR == 0
+                qMVHR = 0;
             else
-                qMVHR = rateHeatLossMVHR(To,Ti(j),240,0.9);
+                if bypass == 1
+                    qMVHR = rateHeatLossMVHRbypass(To,Ti(j),vMVHR);
+                elseif bypass == 0
+                    qMVHR = rateHeatLossMVHR(To,Ti(j),vMVHR,0.9);
+                else
+                    qMVHR1 = rateHeatLossMVHRbypass(To,Ti(j),vMVHR);
+                    qMVHR2 = rateHeatLossMVHR(To,Ti(j),vMVHR,0.9);
+                    qMVHR = qMVHR1*bypass+qMVHR2*(1-bypass);
+                end
             end
-            [A, qHeat(j+1)] = controller(Ts, Ti(j), qHeat(j));
+            
+            [A, qHeat(j+1), bypass] = controller(Tst, Tsb, Ti(j));
             
             if any(A~=0)
                 [qStack, vStack] = stackVent(Ti(j),To,windSpeed,A);
-                qStack = qStack(1);
+                
             else
                 qStack = 0;
                 vStack = 0;
             end
             
-            
-            
-            
             % total losses
             qTotalLoss = qHeatTransfer+qTightness+qMVHR+qStack;
             qTotalGain = qOccupancy+qSolarAir+qThermalAir+qHeat(j+1);
-            qTotal(j) = qTotalLoss+qTotalGain;
+            try
+                qTotal(j) = qTotalLoss+qTotalGain;
+            catch
+                a=1;
+            end
             %new temperautre inside
             Ti(j+1) = Ti(j) + qTotal(j).*dt/(600*1000);
             
-            if Ti(j+1) > 23
-                bypass = 1;
-            elseif Ti(j+1) < 22
-                bypass = 0;
-            end
+            vTotal = vStack + vAC;
+            vReq = 240;
+            vMVHR = vReq - vTotal;
             
+            if vMVHR < 0
+                vMVHR = 0;
+            elseif vMVHR > vReq
+                vMVHR = vReq;
+            end
         end
-        
-        Tbuffo(i-tStart+buffer+1) = To;
-        Tbuffi(i-tStart+buffer+1,:) = Ti;
-        qBuffMean(i-tStart+buffer+1) = mean(qTotal);
-        qBuffPeak(i-tStart+buffer+1) = max(qTotal);
-        
-        qHeating(i-tStart+buffer+1)=mean(qHeat);
         
         newQ = qHeat(end);
         qHeat = zeros(stepHour+1,1);
@@ -179,44 +190,47 @@ if buffer > 0
         Tw = zeros(stepHour+1,1);
         Tw(1) = newTw;
     end
-    
-else
-    bufferQ = zeros(1,10);
 end
 
 %% run for the real time
 
-for i = tStart-buffer:tStart-1
-    hour = mod(i,8760)+1; %get hour
-    % get hourly data
+for i = tStart:tEnd
     
-    globalIrr = wSTRUCTtry.global(hour);
-    diffIrr = wSTRUCTtry.diffuse(hour);
-    To = wSTRUCTtry.Temp(hour);
-    windSpeed = wSTRUCTtry.WSpeed(hour);
-    [Pr, Nu, k] = assignPRandNU(To);
+    hour = mod(i,8760)+1; %get hour
+    
     newStructure = windowfromstructure(structure,window);
     
     t = [wSTRUCTtry.MONTH(hour),wSTRUCTtry.DAY(hour),wSTRUCTtry.HOUR(hour)];
     Tg = tempOfGround(hour);
     
-    solarA = sunSphCoords(t);
-    solarAcart = vecsph2cart(solarA);
     
-    [~, dirGain, diffGain] = overallSolarGain(globalIrr, diffIrr, t, window, g);
     
-    if mod(hour,24) < 8 || mod(hour,24)>22
-        Ts = 18;
+    
+    if mod(hour,24)<8 || mod(hour,24)>23
+        Tst = 21.4;
+        Tsb = 17;
     else
-        Ts = 21;
+        Tst = 21.4;
+        Tsb = 20.6;
     end
     
     
     %run for all steps in hour
     for j = 1:stepHour
         
+        dirGainj = interp1(0:8759,dirGain,hour+j/stepHour);
+        diffGainj = interp1(0:8759,diffGain,hour+j/stepHour);
+        solarAcart(1) = interp1(0:8759,allSolarAcart(:,1),hour+j/stepHour);
+        solarAcart(2) = interp1(0:8759,allSolarAcart(:,2),hour+j/stepHour);
+        solarAcart(3) = interp1(0:8759,allSolarAcart(:,3),hour+j/stepHour);
+        
+        To = interp1(tStep, noisyTo, (hour+j/stepHour));
+        windSpeed = interp1(tStep, noisyWindSpeed, (hour+j/stepHour));
+        
+        [Pr, Nu, k] = assignPRandNU(To);
+        
         % run solar and thermal mass stuff
-        [qSolar, qThermalAir, ~, T] = thermalAndSolar(globalIrr, diffIrr, t, dt, cTemp, Ti(j), g, Tg, window, thermalMass, solarAcart, meshCrit, dirGain, diffGain);
+        [qSolar, qThermalAir, ~, T] = thermalAndSolar([], [], [], dt, cTemp, Ti(j), g, Tg, window, thermalMass, solarAcart, meshCrit, dirGainj, diffGainj);
         cTemp = T;
         
         [T, qSolarAir] = qThermalStructure(Ti(j), Tw(j), qSolar);
@@ -224,39 +238,53 @@ for i = tStart-buffer:tStart-1
         
         % run other heat losses
         qHeatTransfer = sum(rateHeatLossHT(To,windSpeed,Ti(j),Pr,Nu,k,newStructure,window,foundation),2);
-        qTightness = rateHeatLossAC(Ti(j),To,foundation);
+        [qTightness, vAC] = rateHeatLossAC(Ti(j),To,foundation);
         qOccupancy = q_occupancy(hour);
-        if bypass
-            qMVHR = rateHeatLossMVHRbypass(To,Ti(j),240);
+        
+        if vMVHR == 0
+            qMVHR = 0;
         else
-            qMVHR = rateHeatLossMVHR(To,Ti(j),240,0.9);
+            if bypass == 1
+                qMVHR = rateHeatLossMVHRbypass(To,Ti(j),vMVHR);
+            elseif bypass == 0
+                qMVHR = rateHeatLossMVHR(To,Ti(j),vMVHR,0.9);
+            else
+                qMVHR1 = rateHeatLossMVHRbypass(To,Ti(j),vMVHR);
+                qMVHR2 = rateHeatLossMVHR(To,Ti(j),vMVHR,0.9);
+                qMVHR = qMVHR1*bypass+qMVHR2*(1-bypass);
+            end
         end
-        [A, qHeat(j+1)] = controller(Ts, Ti(j), qHeat(j));
+        
+        [A, qHeat(j+1), bypass] = controller(Tst, Tsb, Ti(j));
         
         if any(A~=0)
             [qStack, vStack] = stackVent(Ti(j),To,windSpeed,A);
-            qStack = qStack(1);
+            
         else
             qStack = 0;
             vStack = 0;
         end
         
-        
-        
-        
         % total losses
         qTotalLoss = qHeatTransfer+qTightness+qMVHR+qStack;
         qTotalGain = qOccupancy+qSolarAir+qThermalAir+qHeat(j+1);
-        qTotal(j) = qTotalLoss+qTotalGain;
+        try
+            qTotal(j) = qTotalLoss+qTotalGain;
+        catch
+            a=1;
+        end
         %new temperautre inside
         Ti(j+1) = Ti(j) + qTotal(j).*dt/(600*1000);
         
-        if Ti(j+1) > 23
-            bypass = 1;
-        elseif Ti(j+1) < 22
-            bypass = 0;
-        end
+        vTotal = vStack + vAC;
+        vReq = 240;
+        vMVHR = vReq - vTotal;
         
+        if vMVHR < 0
+            vMVHR = 0;
+        elseif vMVHR > vReq
+            vMVHR = vReq;
+        end
     end
     
     Tbuffo(i-tStart+buffer+1) = To;

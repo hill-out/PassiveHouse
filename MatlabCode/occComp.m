@@ -13,6 +13,6 @@ a = zeros(8760,1);
 b = zeros(8760,1);
 
 for i=1:8760
-    a(i) = occlusion(solarAcart(i),wi,0);
-    b(i) = occlusion(solarAcart(i),wo,0);
+    a(i) = occlusion(solarAcart(i,:),wi,0);
+%    b(i) = occlusion(solarAcart(i,:),wo,0);
 end

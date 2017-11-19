@@ -1,10 +1,10 @@
-function [out, in] = occlusion(sunA, window, furnature)
+function [out, in] = occlusion(sunA, window, f)
 % occlusion is a function that calculates how much sun is blocked inside
 % and outside
 % 
 % sunA - sun angle [cart]
 % window - vector of the current window [mx9]
-% furnature - inside barriers (1 = no barrier)
+% f - inside barriers (0 = no barrier)
 % 
 % occFactor - occlusion factor [1x2] [in, out]
 
@@ -43,6 +43,6 @@ newA = newL.*newH;
 A = window(:,4).*window(:,5);
 wallOcc = newA./A;
 
-in = max([zeros(size(wallOcc)), min([ones(size(wallOcc)),(wallOcc.*furnature)]')']')';
+in = max([zeros(size(wallOcc)), min([ones(size(wallOcc)),(wallOcc.*f)]')']')';
 
 end

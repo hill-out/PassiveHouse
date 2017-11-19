@@ -15,7 +15,8 @@ xx = 0:(1/step):((numel(y)+1));
 y = [y(1); y; y(end)];
 yy = spline(x,y,xx);
 
-ny = awgn(yy,nP);
+%ny = awgn(yy,nP);
+ny = yy;
 
 if r
     expandy = reshape(repmat(y,1,2)',[],1);
