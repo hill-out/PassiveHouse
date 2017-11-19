@@ -27,7 +27,7 @@ end
 %cold values
 qHeat = 0;
 bypass = 0;
-A = [0, 0, 0];
+A  = [0, 0, 0];
 
 if dTb > 0
     % heating on fully

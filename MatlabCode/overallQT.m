@@ -8,7 +8,7 @@ function [] = overallQT(t1, t2, buffer)
 
 %% parameter definition
 topCellSize = 0.005; %m
-dt = 5; %s
+dt = 20; %s
 g = 0.8;
 stepHour = floor(3600/dt); %time steps per hour
 solarAcart = zeros(1,3);
@@ -196,7 +196,7 @@ end
 
 for i = tStart:tEnd
     
-    hour = mod(i,8760)+1; %get hour
+    hour = mod(i,8760); %get hour
     
     newStructure = windowfromstructure(structure,window);
     
@@ -287,12 +287,12 @@ for i = tStart:tEnd
         end
     end
     
-    Tbuffo(i-tStart+buffer+1) = To;
-    Tbuffi(i-tStart+buffer+1,:) = Ti;
-    qBuffMean(i-tStart+buffer+1) = mean(qTotal);
-    qBuffPeak(i-tStart+buffer+1) = max(qTotal);
+    Tbuffo(i-tStart+1) = To;
+    Tbuffi(i-tStart+1,:) = Ti;
+    qBuffMean(i-tStart+1) = mean(qTotal);
+    qBuffPeak(i-tStart+1) = max(qTotal);
     
-    qHeating(i-tStart+buffer+1)=mean(qHeat);
+    qHeating(i-tStart+1)=mean(qHeat);
     
     newQ = qHeat(end);
     qHeat = zeros(stepHour+1,1);
