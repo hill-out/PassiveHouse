@@ -118,14 +118,18 @@ SPmonth(12) = sum(SPdaily(:,Nov+1:Dec));
 
 SPmonth = SPmonth'; %Transpose array
 
+
+
+
 %Stacked Power generated chart for every month
-test = [SPmonth,WPmonth];
-bar(test, 'stacked'); title('Stacked Monthly Power Generated'); legend({'Solar Power','Wind Power'})
-allTotal = sum(sum(test));
+TPowerStack = [SPmonth,WPmonth];
+TotalAnnual = sum(sum(TPowerStack));
+% bar(TPowerStack, 'stacked'); title('Stacked Monthly Power Generated'); legend({'Solar Power','Wind Power'})
 
 
-%Rough calculations
+
+%Rough calculations for Dec
 meanSPdailyDec = mean(SPhourly(:,Nov+1:Dec),2);
 meanWPdailyDec = mean(WPhourly(:,Nov+1:Dec),2);
 meanTPdailyDec = sum([meanSPdailyDec , meanWPdailyDec],2);
-figure; bar(meanTPdailyDec); title('Mean Total Hourly Power Generated in Dec')
+% figure; bar(meanTPdailyDec); title('Mean Total Hourly Power Generated in Dec')
