@@ -45,7 +45,7 @@ airDensity = 1.23; %kg/m3
 d = 2.08; % Turbine Diameter
 eff = 0.3; % 30 percent overall efficiency at converting wind to electricity
 cutIn = 3.4; % m/s - Wind Cut in speed
-maxOutput = 1.5; %kW - maximum rated power output
+maxOutput = 1500; %W - maximum rated power output
 n = 1; % Number of turbine
 
 %Calculate Sweeping area
@@ -63,7 +63,7 @@ for i = 1:s(1)
         windSpeedData(i) = 0;
     else
         windSpeedData(i) = windSpeedData(i);
-        windPower(i) = (1/2 .* airDensity .* A .* (windSpeedData(i)).^3 .* eff)./1000;
+        windPower(i) = (1/2 .* airDensity .* A .* (windSpeedData(i)).^3 .* eff); %in Watts
         
         if windPower(i) > maxOutput
             windPower(i) = maxOutput;
@@ -90,6 +90,8 @@ WPmonth(10) = sum(WPdaily(:,Sep+1:Oct));
 WPmonth(11) = sum(WPdaily(:,Oct+1:Nov));
 WPmonth(12) = sum(WPdaily(:,Nov+1:Dec));
 
+WPmonth = WPmonth'; %Transpose array
+
 % bar(WPmonth);title('Monthly Wind Power Generated');...
 %     xlabel('Months');ylabel('Power (kWh/month)');
 
@@ -113,3 +115,17 @@ SPmonth(9) = sum(SPdaily(:,Aug+1:Sep));
 SPmonth(10) = sum(SPdaily(:,Sep+1:Oct));
 SPmonth(11) = sum(SPdaily(:,Oct+1:Nov));
 SPmonth(12) = sum(SPdaily(:,Nov+1:Dec));
+
+SPmonth = SPmonth'; %Transpose array
+
+%Stacked Power generated chart for every month
+test = [SPmonth,WPmonth];
+bar(test, 'stacked'); title('Stacked Monthly Power Generated'); legend({'Solar Power','Wind Power'})
+allTotal = sum(sum(test));
+
+
+%Rough calculations
+meanSPdailyDec = mean(SPhourly(:,Nov+1:Dec),2);
+meanWPdailyDec = mean(WPhourly(:,Nov+1:Dec),2);
+meanTPdailyDec = sum([meanSPdailyDec , meanWPdailyDec],2);
+figure; bar(meanTPdailyDec); title('Mean Total Hourly Power Generated in Dec')
