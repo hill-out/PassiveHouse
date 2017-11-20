@@ -291,16 +291,26 @@ for i = tStart:tEnd
 
         [A(:,j), qHeat(j+1), bypass(j)] = controller(Tst, Tsb, Ti(j));
 
+        vTotal(j) = vStack(j) + vAC(j);
+        vReq(j) = 240;
+        vMVHR(j) = vReq(j) - vTotal(j);
+        
+        if vMVHR(j) < 0
+            vMVHR(j) = 0;
+        elseif vMVHR(j) > vReq(j)
+            vMVHR(j) = vReq(j);
+        end        
+        
         if vMVHR(j) == 0
             qMVHR(j) = 0;
         else
             if bypass(j) == 1
-                qMVHR(j) = rateHeatLossMVHRbypass(To,Ti(j),vMVHR(j));
+                qMVHR(j) = rateHeatLossMVHRbypass(To(j),Ti(j),vMVHR(j));
             elseif bypass(j) == 0
-                qMVHR(j) = rateHeatLossMVHR(To,Ti(j),vMVHR(j),0.9);
+                qMVHR(j) = rateHeatLossMVHR(To(j),Ti(j),vMVHR(j),0.9);
             else
-                qMVHR1 = rateHeatLossMVHRbypass(To,Ti(j),vMVHR(j));
-                qMVHR2 = rateHeatLossMVHR(To,Ti(j),vMVHR(j),0.9);
+                qMVHR1 = rateHeatLossMVHRbypass(To(j),Ti(j),vMVHR(j));
+                qMVHR2 = rateHeatLossMVHR(To(j),Ti(j),vMVHR(j),0.9);
                 qMVHR(j) = qMVHR1*bypass(j)+qMVHR2*(1-bypass(j));
             end
         end
@@ -324,15 +334,6 @@ for i = tStart:tEnd
         %new temperautre inside
         Ti(j+1) = Ti(j) + qTotal(j).*dt/(600*1000);
         
-        vTotal(j) = vStack(j) + vAC(j);
-        vReq(j) = 240;
-        vMVHR(j) = vReq(j) - vTotal(j);
-        
-        if vMVHR < 0
-            vMVHR(j) = 0;
-        elseif vMVHR(j) > vReq(j)
-            vMVHR(j) = vReq(j);
-        end
     end
     
     all.To(i-tStart+1,:) = To;
