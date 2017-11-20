@@ -12,7 +12,7 @@ function [pvOut, dirPVO, diffPVO] = overallPVOut(globalIrr, diffIrr, t, panels, 
 % diffGain - the diffuse solar pv out
 
 if nargin < 5
-    eff = 0.19;
+    eff = 0.197; %0.19
 end
 
 if nargin < 4 || isempty(panels)

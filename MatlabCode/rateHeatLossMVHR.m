@@ -1,7 +1,8 @@
 function [q_MVHR] = rateHeatLossMVHR(T_o,T_i,extract_rate,eff_HR)
 
 Cp_rho = 0.333;
-Cp=1.2;
+rho = 1.2;
+Cp=1;
 P_el = 43;
 rho = 1.2;
 

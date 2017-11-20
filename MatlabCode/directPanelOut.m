@@ -9,7 +9,7 @@ function [pvOut] = directPanelOut(dirIrr, t, panels, eff)
 % gain - solar gain for the specified time Wh
 
 if nargin < 4
-    eff = 0.19;
+    eff = 0.197; %0.19
 end
 
 if nargin < 3 || isempty(panels)
