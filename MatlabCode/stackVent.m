@@ -2,7 +2,7 @@ function [q, V] = stackVent(T_i,T_o,U,A)
 %T_i = 24;
 %T_o = wSTRUCT.Temp;
 %U = wSTRUCT.WSpeed;
-U = zeros(size(T_o,1),1);
+%U = zeros(size(T_o,1),1);
 
 %Inlet (z1 and z2) and oulet (z3) heights:
 z = [1.25, 4.125, 6.5]; 
@@ -22,7 +22,7 @@ delta_rho = ((T_i - T_o)./(T_o + 273)).*rho;
 
 delta_Po = ((delta_rho.*g.*(z(3)+z(2)))-(0.5.*rho.*(U.^2).*(Cp(3)+Cp(2))))/2;
 
-delta_P = zeros(8760,3);
+delta_P = zeros(1,3);
 for i = 1:1:3
     delta_P(:,i) = delta_Po - (delta_rho.*g.*z(i)) + (0.5.*rho.*(U.^2).*Cp(i));
 end
@@ -30,6 +30,7 @@ end
 V = Cd(3).*A(3).*S(3).*(sqrt((2.*abs(delta_P(:,3)))./rho)); 
 
 V(V > 0) = 0;
+V = abs(V*(60^2));
 
-q = ((abs(V*(60^2)).*rho).*(1).*(T_o-T_i))/3.6;
+q = ((V.*rho).*(1).*(T_o-T_i))/3.6;
 

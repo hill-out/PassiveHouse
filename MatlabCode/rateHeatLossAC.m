@@ -1,4 +1,4 @@
-function [q_ac,m_dot_ave] = rateHeatLossAC(T_i,T_o,foundation)
+function [q_ac,v] = rateHeatLossAC(T_i,T_o,foundation)
 
 % Heat loss due to air changes (with an airtightness of 0.6ac/h @50Pa
 %pressure difference. 
@@ -15,7 +15,7 @@ H_cieling = 2.5;
 m_dot_50Pa = (foundation(1,6)*(2*H_cieling))*1.2*0.6; % kg per hour 
 
 m_dot_ave = m_dot_50Pa/20; %CIBSE
-
+v = m_dot_ave/1.2;
 q_ac = (m_dot_ave.*Cp_air*(T_o - T_i))./(3.6); %W
 
 end
