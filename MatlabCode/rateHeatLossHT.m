@@ -1,4 +1,4 @@
-function [q_ht] = rateHeatLossHT(T_o,u,T_i,Pr,nu,k_air,structure,windows,foundation) 
+function [q_ht, q_walls, q_windows] = rateHeatLossHT(T_o,u,T_i,Pr,nu,k_air,structure,windows,foundation) 
 
 %Find the rate of thermal heat loss through building envilope due to heat
 %transfer. 
@@ -106,5 +106,10 @@ q_ht_windows = cell2mat(q_ht_windows);
 
 % Combine structure, foundation, windows and ac heat loss matrices:
 
-q_ht = [q_ht_structure q_ht_foundation q_ht_windows];
+%q_ht = [q_ht_structure q_ht_foundation q_ht_windows];
+q_ht = [q_ht_structure q_ht_windows];
+
+q_windows = sum(q_ht_windows);
+q_walls = sum(q_ht_structure);
+
 end
