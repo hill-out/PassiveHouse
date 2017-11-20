@@ -41,14 +41,22 @@ newA = newL.*newH;
 
 A = window(:,4).*window(:,5);
 wallOcc = newA./A;
-wallOcc = max([zeros(size(wallOcc)), min([ones(size(wallOcc)),(wallOcc.*f)]')']')';
+wallOcc = max([zeros(size(wallOcc)), min([ones(size(wallOcc)),(wallOcc)]')']')';
 
 %% room size calculation
 % relates to walls stopping the sun hitting the walls
 
-windowBaseHeight = 0.5;
+windowBH = 0.5;
+hTop = (window(:,5)+windowBH)/tan(el);
+hBot = (windowBH)/tan(el);
 
+hTop(hTop>4) = 4;
+hBot(hBot>4) = 4;
 
-in = max([zeros(size(wallOcc)), min([ones(size(wallOcc)),(wallOcc.*f)]')']')';
+roomOcc = 1-(hTop-hBot)./4;
+roomOcc = max([zeros(size(wallOcc)), min([ones(size(roomOcc)),(roomOcc)]')']')';
 
+%% sum for all
+out = wallOcc .* blockage;
+in = wallOcc .* roomOcc .* f;
 end
