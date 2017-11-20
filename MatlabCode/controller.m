@@ -14,7 +14,7 @@ dTt = (Ti - Tst);
 dTb = (Tsb - Ti);
 
 houseArea = 82.76*2;
-qHeatm2 = (dTb - 0.4)*10;
+qHeatm2 = (dTb)*10;
 qMaxm2 = 10;
 
 bP = (dTt - 0.4);
@@ -29,12 +29,12 @@ qHeat = 0;
 bypass = 0;
 A  = [0, 0, 0];
 
-if dTb > 0
+if dTb > 1
     % heating on fully
     qHeat = qMaxm2*houseArea;
-% elseif dTb > 0
-%     % heating partially on
-%     qHeat = qHeatm2*houseArea;
+elseif dTb > 0
+    % heating partially on
+    qHeat = qHeatm2*houseArea;
 end
 
 if dTt > 3.6

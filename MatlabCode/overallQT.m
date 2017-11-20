@@ -65,7 +65,7 @@ cTemp = cTempInitialise(meshCrit, topCellRat, Ttop, Tbot);
 
 %% make noisy data
 % makes all the data we have measured and fits a noisy line to it
-tStep = 0:0.5:8760;
+tStep = 0:0.5:8761;
 
 noisyTo = addNoise(wSTRUCTtry.Temp,2,10,0);
 noisyWindSpeed = addNoise(wSTRUCTtry.WSpeed,2,10,1);
@@ -74,12 +74,16 @@ noisyWindSpeed = addNoise(wSTRUCTtry.WSpeed,2,10,1);
 allt = [wSTRUCTtry.MONTH,wSTRUCTtry.DAY,wSTRUCTtry.HOUR];
 
 allSolarA = sunSphCoords(allt);
+allSolarA = [allSolarA;allSolarA(1,:)];
 allSolarAcart = vecsph2cart(allSolarA);
 
 [~, dirGain, diffGain] = overallSolarGain(wSTRUCTtry.global, wSTRUCTtry.diffuse, allt, window, g);
 
 dirGain(allSolarA(:,2)<0)=0;
 diffSolarA(allSolarA(:,2)<0)=0;
+
+dirGain = [dirGain;dirGain(1,:)];
+diffGain = [diffGain;diffGain(1,:)];
 
 %% run for the buffer time (if needed)
 if buffer > 0
@@ -109,11 +113,11 @@ if buffer > 0
         %run for all steps in hour
         for j = 1:stepHour
             
-            dirGainj = interp1(0:8759,dirGain,hour+j/stepHour);
-            diffGainj = interp1(0:8759,diffGain,hour+j/stepHour);
-            solarAcart(1) = interp1(0:8759,allSolarAcart(:,1),hour+j/stepHour);
-            solarAcart(2) = interp1(0:8759,allSolarAcart(:,2),hour+j/stepHour);
-            solarAcart(3) = interp1(0:8759,allSolarAcart(:,3),hour+j/stepHour);
+            dirGainj = interp1(1:8761,dirGain,hour+j/stepHour);
+            diffGainj = interp1(1:8761,diffGain,hour+j/stepHour);
+            solarAcart(1) = interp1(1:8761,allSolarAcart(:,1),hour+j/stepHour);
+            solarAcart(2) = interp1(1:8761,allSolarAcart(:,2),hour+j/stepHour);
+            solarAcart(3) = interp1(1:8761,allSolarAcart(:,3),hour+j/stepHour);
             
             To = interp1(tStep, noisyTo, (hour+j/stepHour));
             windSpeed = interp1(tStep, noisyWindSpeed, (hour+j/stepHour));
@@ -242,6 +246,7 @@ for i = tStart:tEnd
     bypass = zeros(1,stepHour);
     
     hour = mod(i,8760); %get hour
+    hour(hour==0)=8760;
     
     newStructure = windowfromstructure(structure,window);
     
@@ -260,11 +265,11 @@ for i = tStart:tEnd
     %run for all steps in hour
     for j = 1:stepHour
         
-        dirGainj = interp1(0:8759,dirGain,hour+j/stepHour);
-        diffGainj = interp1(0:8759,diffGain,hour+j/stepHour);
-        solarAcart(1) = interp1(0:8759,allSolarAcart(:,1),hour+j/stepHour);
-        solarAcart(2) = interp1(0:8759,allSolarAcart(:,2),hour+j/stepHour);
-        solarAcart(3) = interp1(0:8759,allSolarAcart(:,3),hour+j/stepHour);
+        dirGainj = interp1(1:8761,dirGain,hour+j/stepHour);
+        diffGainj = interp1(1:8761,diffGain,hour+j/stepHour);
+        solarAcart(1) = interp1(1:8761,allSolarAcart(:,1),hour+j/stepHour);
+        solarAcart(2) = interp1(1:8761,allSolarAcart(:,2),hour+j/stepHour);
+        solarAcart(3) = interp1(1:8761,allSolarAcart(:,3),hour+j/stepHour);
         
         To(j) = interp1(tStep, noisyTo, (hour+j/stepHour));
         windSpeed = interp1(tStep, noisyWindSpeed, (hour+j/stepHour));
@@ -366,6 +371,5 @@ for i = tStart:tEnd
     Tw = zeros(stepHour+1,1);
     Tw(1) = newTw;
 end
-
 
 end

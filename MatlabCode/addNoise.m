@@ -15,15 +15,15 @@ xx = 0:(1/step):((numel(y)+1));
 y = [y(1); y; y(end)];
 yy = spline(x,y,xx);
 
-%ny = awgn(yy,nP);
-ny = yy;
+ny = awgn(yy,nP);
+%ny = yy;
 
 if r
     expandy = reshape(repmat(y,1,2)',[],1);
-    ny(expandy(1:end-1)==0)=0;
+    %ny(expandy(1:end-1)==0)=0;
+    ny(expandy==0)=0;
     ny(ny < 0) = 0;
 end
 
-ny = ny(1+floor(step/2):end-step+floor(step/2));
-
+ny = [ny(1+floor(step/2):end),ny(1:floor(step/2))];
 end
