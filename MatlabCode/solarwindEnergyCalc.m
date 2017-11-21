@@ -98,7 +98,7 @@ WPmonth = WPmonth'; %Transpose array
 
 
 %Calculate hourly, daily, and total SOLAR power generated
-sol_installP = 330*39;
+sol_installP = 330*21;
 solarPower = overallPVOut(wSTRUCTtry.global,wSTRUCTtry.diffuse, [wSTRUCTtry.MONTH,wSTRUCTtry.DAY,wSTRUCTtry.HOUR],[]);
 SPhourly = reshape(solarPower,24,365);
 
@@ -140,8 +140,54 @@ TotalAnnual = sum(sum(TPowerStack));
 
 
 
-%Rough calculations for Dec
+%Mean Hourly Power generation for each month
+% Jan
+meanSPdailyJan = mean(SPhourly(:,1:Jan),2);
+meanWPdailyJan = mean(WPhourly(:,1:Jan),2);
+meanTPdailyJan = sum([meanSPdailyJan , meanWPdailyJan],2);
+% Feb
+meanSPdailyFeb = mean(SPhourly(:,Jan+1:Feb),2);
+meanWPdailyFeb = mean(WPhourly(:,Jan+1:Feb),2);
+meanTPdailyFeb = sum([meanSPdailyFeb , meanWPdailyFeb],2);
+% Mar
+meanSPdailyMar = mean(SPhourly(:,Feb+1:Mar),2);
+meanWPdailyMar = mean(WPhourly(:,Feb+1:Mar),2);
+meanTPdailyMar = sum([meanSPdailyMar , meanWPdailyMar],2);
+% Apr
+meanSPdailyApr = mean(SPhourly(:,Mar+1:Apr),2);
+meanWPdailyApr = mean(WPhourly(:,Mar+1:Apr),2);
+meanTPdailyApr = sum([meanSPdailyApr , meanWPdailyApr],2);
+% May
+meanSPdailyMay = mean(SPhourly(:,Apr+1:May),2);
+meanWPdailyMay = mean(WPhourly(:,Apr+1:May),2);
+meanTPdailyMay = sum([meanSPdailyMay , meanWPdailyMay],2);
+% Jun
+meanSPdailyJun = mean(SPhourly(:,May+1:Jun),2);
+meanWPdailyJun = mean(WPhourly(:,May+1:Jun),2);
+meanTPdailyJun = sum([meanSPdailyJun , meanWPdailyJun],2);
+% Jul
+meanSPdailyJul = mean(SPhourly(:,Jun+1:Jul),2);
+meanWPdailyJul = mean(WPhourly(:,Jun+1:Jul),2);
+meanTPdailyJul = sum([meanSPdailyJul , meanWPdailyJul],2);
+% Aug
+meanSPdailyAug = mean(SPhourly(:,Jul+1:Aug),2);
+meanWPdailyAug = mean(WPhourly(:,Jul+1:Aug),2);
+meanTPdailyAug = sum([meanSPdailyAug , meanWPdailyAug],2);
+% Sep
+meanSPdailySep = mean(SPhourly(:,Aug+1:Sep),2);
+meanWPdailySep = mean(WPhourly(:,Aug+1:Sep),2);
+meanTPdailySep = sum([meanSPdailySep , meanWPdailySep],2);
+% Oct
+meanSPdailyOct = mean(SPhourly(:,Sep+1:Oct),2);
+meanWPdailyOct = mean(WPhourly(:,Sep+1:Oct),2);
+meanTPdailyOct = sum([meanSPdailyOct , meanWPdailyOct],2);
+% Nov
+meanSPdailyNov = mean(SPhourly(:,Oct+1:Nov),2);
+meanWPdailyNov = mean(WPhourly(:,Oct+1:Nov),2);
+meanTPdailyNov = sum([meanSPdailyNov , meanWPdailyNov],2);
+% Dec
 meanSPdailyDec = mean(SPhourly(:,Nov+1:Dec),2);
 meanWPdailyDec = mean(WPhourly(:,Nov+1:Dec),2);
 meanTPdailyDec = sum([meanSPdailyDec , meanWPdailyDec],2);
+
 % figure; bar(meanTPdailyDec); title('Mean Total Hourly Power Generated in Dec')
