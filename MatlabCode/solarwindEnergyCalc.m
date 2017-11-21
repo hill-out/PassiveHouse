@@ -1,11 +1,12 @@
 clear; clc;
-%The script will load the weather data data and calculate the solar and
-%wind power generated
+%The script will load the weather data and calculate the solar and wind power generated
 
 %Progress:
-%   Wind power calculation      - Complete
-%   Solar power calculation     - Complete
-%   Produce stacked bar chart   - Incomplete
+%   Wind power calculation                              - Complete
+%   Solar power calculation                             - Complete
+%   Produce stacked bar chart                           - Complete
+%   Produce monthly profit/loss analysis                - Incomplete 
+    %   (See Dec analysis in 'House w Children Hourly Load.xlsx')
 
 
 %To do next:
@@ -59,13 +60,13 @@ s = size(windSpeedData);
 windPower = zeros(s(1),1);
 
 for i = 1:s(1)
-    if windSpeedData(i) < cutIn
-        windSpeedData(i) = 0;
+    if windSpeedData(i) < cutIn %Wind speed below required cut in speed is set to zero 
+        windSpeedData(i) = 0;   %as it cannot start the wind turbine
     else
         windSpeedData(i) = windSpeedData(i);
         windPower(i) = (1/2 .* airDensity .* A .* (windSpeedData(i)).^3 .* eff); %in Watts
         
-        if windPower(i) > maxOutput
+        if windPower(i) > maxOutput %Limit max power generated to the turbine rating
             windPower(i) = maxOutput;
         end
     end
@@ -93,12 +94,23 @@ WPmonth(12) = sum(WPdaily(:,Nov+1:Dec));
 WPmonth = WPmonth'; %Transpose array
 
 % bar(WPmonth);title('Monthly Wind Power Generated');...
-%     xlabel('Months');ylabel('Power (kWh/month)');
+%     xlabel('Months');ylabel('Power (Wh/month)');
 
 
 %Calculate hourly, daily, and total SOLAR power generated
+sol_installP = 330*39;
 solarPower = overallPVOut(wSTRUCTtry.global,wSTRUCTtry.diffuse, [wSTRUCTtry.MONTH,wSTRUCTtry.DAY,wSTRUCTtry.HOUR],[]);
 SPhourly = reshape(solarPower,24,365);
+
+    %%Limit output to Solar installed peak
+        for YR = 1:365
+            for TFH = 1:24
+                if SPhourly(TFH,YR) > sol_installP
+                SPhourly(TFH,YR) = sol_installP; 
+                end
+            end
+        end
+
 SPdaily = sum(SPhourly);
 SPtotal = sum(SPdaily);
 
