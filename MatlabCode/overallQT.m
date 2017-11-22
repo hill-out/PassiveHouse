@@ -27,7 +27,7 @@ hCeiling = 2.5;
 bypass = 0;
 Tbuffi = zeros(buffer,stepHour+1);
 
-load('weatherSTRUCTtry.mat')
+load('weatherSTRUCTdsy.mat')
 
 load('occupancyMAT.mat') %get occupancy data
 [q_occupancy] = occupancyGain(occupancyMAT(:,3),occupancyMAT(:,2));
@@ -67,17 +67,17 @@ cTemp = cTempInitialise(meshCrit, topCellRat, Ttop, Tbot);
 % makes all the data we have measured and fits a noisy line to it
 tStep = 0:0.5:8761;
 
-noisyTo = addNoise(wSTRUCTtry.Temp,2,10,0);
-noisyWindSpeed = addNoise(wSTRUCTtry.WSpeed,2,10,1);
+noisyTo = addNoise(wSTRUCTdsy.Temp,2,10,0);
+noisyWindSpeed = addNoise(wSTRUCTdsy.WSpeed,2,10,1);
 
 %% get solar stuff
-allt = [wSTRUCTtry.MONTH,wSTRUCTtry.DAY,wSTRUCTtry.HOUR];
+allt = [wSTRUCTdsy.MONTH,wSTRUCTdsy.DAY,wSTRUCTdsy.HOUR];
 
 allSolarA = sunSphCoords(allt);
 allSolarA = [allSolarA;allSolarA(1,:)];
 allSolarAcart = vecsph2cart(allSolarA);
 
-[~, dirGain, diffGain] = overallSolarGain(wSTRUCTtry.global, wSTRUCTtry.diffuse, allt, window, g);
+[~, dirGain, diffGain] = overallSolarGain(wSTRUCTdsy.global, wSTRUCTdsy.diffuse, allt, window, g);
 
 dirGain(allSolarA(:,2)<0)=0;
 diffSolarA(allSolarA(:,2)<0)=0;
@@ -95,7 +95,7 @@ if buffer > 0
         
         newStructure = windowfromstructure(structure,window);
         
-        t = [wSTRUCTtry.MONTH(hour),wSTRUCTtry.DAY(hour),wSTRUCTtry.HOUR(hour)];
+        t = [wSTRUCTdsy.MONTH(hour),wSTRUCTdsy.DAY(hour),wSTRUCTdsy.HOUR(hour)];
         Tg = tempOfGround(hour);
         
         
@@ -206,6 +206,7 @@ all.qTotal = zeros(tEnd-tStart+1,stepHour);
 all.qHeatTransfer = zeros(tEnd-tStart+1,stepHour);
 all.qWalls = zeros(tEnd-tStart+1,stepHour);
 all.qWindows = zeros(tEnd-tStart+1,stepHour);
+all.qFoundation = zeros(tEnd-tStart+1,stepHour);
 all.qTightness = zeros(tEnd-tStart+1,stepHour);
 all.qMVHR = zeros(tEnd-tStart+1,stepHour);
 all.qStack = zeros(tEnd-tStart+1,stepHour);
@@ -229,6 +230,7 @@ for i = tStart:tEnd
     qHeatTransfer = zeros(1,stepHour);
     qWalls = zeros(1,stepHour);
     qWindows = zeros(1,stepHour);
+    qFoundation =zeros(1,stepHour);
     qTightness = zeros(1,stepHour);
     qMVHR = zeros(1,stepHour);
     qStack = zeros(1,stepHour);
@@ -250,7 +252,7 @@ for i = tStart:tEnd
     
     newStructure = windowfromstructure(structure,window);
     
-    t = [wSTRUCTtry.MONTH(hour),wSTRUCTtry.DAY(hour),wSTRUCTtry.HOUR(hour)];
+    t = [wSTRUCTdsy.MONTH(hour),wSTRUCTdsy.DAY(hour),wSTRUCTdsy.HOUR(hour)];
     Tg = tempOfGround(hour);
     
     if mod(hour,24)<8 || mod(hour,24)>23
@@ -277,7 +279,7 @@ for i = tStart:tEnd
         [Pr, Nu, k] = assignPRandNU(To(j));
         
         % run solar and thermal mass stuff
-        [qSolar, qThermalAir(j), ~, T] = thermalAndSolar([], [], [], dt, cTemp, Ti(j), g, Tg, window, thermalMass, solarAcart, meshCrit, dirGainj, diffGainj);
+        [qSolar, qThermalAir(j), qFoundation(j), T] = thermalAndSolar([], [], [], dt, cTemp, Ti(j), g, Tg, window, thermalMass, solarAcart, meshCrit, dirGainj, diffGainj);
         cTemp = T;
         
         [T, qSolarAir(j)] = qThermalStructure(Ti(j), Tw(j), qSolar);
@@ -290,7 +292,15 @@ for i = tStart:tEnd
         qOccupancy(j) = q_occupancy(hour);
 
         [A(:,j), qHeat(j+1), bypass(j)] = controller(Tst, Tsb, Ti(j));
-
+        
+        if any(A(:,j)~=0)
+            [qStack(j), vStack(j)] = stackVent(Ti(j),To(j),windSpeed,A(:,j));
+            
+        else
+            qStack(j) = 0;
+            vStack(j) = 0;
+        end
+        
         vTotal(j) = vStack(j) + vAC(j);
         vReq(j) = 240;
         vMVHR(j) = vReq(j) - vTotal(j);
@@ -315,13 +325,6 @@ for i = tStart:tEnd
             end
         end
         
-        if any(A(:,j)~=0)
-            [qStack(j), vStack(j)] = stackVent(Ti(j),To(j),windSpeed,A(:,j));
-            
-        else
-            qStack(j) = 0;
-            vStack(j) = 0;
-        end
         
         % total losses
         qTotalloss(j) = qHeatTransfer(j)+qTightness(j)+qMVHR(j)+qStack(j);
@@ -344,6 +347,7 @@ for i = tStart:tEnd
     all.qHeatTransfer(i-tStart+1,:) = qHeatTransfer;
     all.qWalls(i-tStart+1,:) = qWalls;
     all.qWindows(i-tStart+1,:) = qWindows;
+    all.qFoundation(i-tStart+1,:) = -qFoundation;
     all.qTightness(i-tStart+1,:) = qTightness;
     all.qMVHR(i-tStart+1,:) = qMVHR;
     all.qStack(i-tStart+1,:) = qStack;
