@@ -1,6 +1,14 @@
+load('weatherSTRUCTdsy.mat')
+t=[wSTRUCTdsy.MONTH,wSTRUCTdsy.DAY,wSTRUCTdsy.HOUR];
 
-load('weatherSTRUCTtry.mat')
-t=[wSTRUCTtry.MONTH,wSTRUCTtry.DAY,wSTRUCTtry.HOUR];
-all2 = overallQT(t(1,:),t(end,:),14*24);
+dailyTotalT = sum(reshape(wSTRUCTdsy.Temp,[],365));
+weeklyTotalT = sum(reshape(dailyTotalT(1:364),[],52));
 
-save('all2.mat','all2')
+tCold = find(weeklyTotalT == min(weeklyTotalT));
+tHot = find(weeklyTotalT == max(weeklyTotalT));
+
+%coldWeek = overallQT(t(tCold*24*7+1,:),t((tCold)*24*7+24,:),28*24);
+hotWeek = overallQT(t(tHot*24*7+1,:),t((tHot)*24*7+24,:),28*24);
+
+save('coldWeek.mat','coldWeek')
+save('hotWeek.mat','hotWeek')
