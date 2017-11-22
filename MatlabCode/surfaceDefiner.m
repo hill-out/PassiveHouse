@@ -84,7 +84,9 @@ for i = 1:numel(a)
         % solarPanel [pL,pH,NUM,eff,nx,ny,nz]
         pL = 1053/1000;
         pH = 1590/1000;
-        solarPanel = [pL, pH, 21, 0.197, cos(20*pi/180), 0, sin(20*pi/180)];          
+        solarPanel = [pL, pH, 24, 0.197, cos(20*pi/180), 0, sin(20*pi/180)];          
+        
+        solarPanel(:,5:7) = solarPanel(:,5:7)*rotz(ang);
         
         out{i} = solarPanel;
     else
