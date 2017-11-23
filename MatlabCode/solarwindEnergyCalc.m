@@ -5,13 +5,7 @@ clear; clc;
 %   Wind power calculation                              - Complete
 %   Solar power calculation                             - Complete
 %   Produce stacked bar chart                           - Complete
-%   Produce monthly profit/loss analysis                - Incomplete 
-    %   (See Dec analysis in 'House w Children Hourly Load.xlsx')
 
-
-%To do next:
-%- Produce a stack bar chart using the month with the lowest power
-%   generated for solar, wind power will match that month
 
 
 
@@ -111,10 +105,11 @@ SPhourly = reshape(solarPower,24,365);
             end
         end
 
-SPdaily = sum(SPhourly);
-SPtotal = sum(SPdaily);
+        
+SPdaily = sum(SPhourly); %Daily solar power is the sum of hourly power
+SPtotal = sum(SPdaily); %Total power in a year is the sum of all daily power
 
-%Monthly WIND power generated
+%Monthly SOLAR power generated
 SPmonth(1) = sum(SPdaily(:,1:Jan));
 SPmonth(2) = sum(SPdaily(:,Jan+1:Feb));
 SPmonth(3) = sum(SPdaily(:,Feb+1:Mar));
@@ -132,10 +127,9 @@ SPmonth = SPmonth'; %Transpose array
 
 
 
-
 %Stacked Power generated chart for every month
 TPowerStack = [SPmonth,WPmonth];
-TotalAnnual = sum(sum(TPowerStack));
+TotalAnnual = sum(sum(TPowerStack)); %Single value of total power produced
 % bar(TPowerStack, 'stacked'); title('Stacked Monthly Power Generated'); legend({'Solar Power','Wind Power'})
 
 
